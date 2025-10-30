@@ -57,10 +57,21 @@ El stack principal será **Next.js 15**, **TailwindCSS**, **TanStack Query**, **
 | |--shared/ -> Loaders, Alertas
 |
 |--hooks/
-| |--useProducts.ts -> tanstackquery: obtener Productos
-| |--useCateria.ts -> tansTackQuery: Obtener categorias
-| |--usePedido.ts -> TansTackQuery: Obtener Pedidos
-| |--useAuth.ts -> Manejo de sesion en Supabase
+| |--productos/
+| |   |--useProductos.ts -> TanStack Query: obtener productos
+| |   |--useMutateProductos.ts -> TanStack Query: mutaciones de productos
+| |--categorias/
+| |   |--useCategorias.ts -> TanStack Query: obtener categorias
+| |   |--useMutateCategoria.ts -> TanStack Query: mutaciones de categorias
+| |--egresos/
+| |   |--useEgresos.ts -> TanStack Query: obtener egresos
+| |   |--useMutateEgresos.ts -> TanStack Query: mutaciones de egresos
+| |--tipoEgresos/
+| |   |--useTipoEgresos.ts -> TanStack Query: obtener tipos de egreso
+| |   |--useMutateTipoEgresos.ts -> TanStack Query: mutaciones de tipos de egreso
+| |--pedidos/
+| |   |--usePedidos.ts -> TanStack Query: obtener pedidos
+| |   |--useMutatePedidos.ts -> TanStack Query: mutaciones de pedidos
 |
 |--mappers/
 | |--producto.mapper.ts
@@ -70,10 +81,10 @@ El stack principal será **Next.js 15**, **TailwindCSS**, **TanStack Query**, **
 | |--rotiseria.mapper.ts
 |
 |--actions/
-| |--productos.ts -> CRUD de los productos
-| |--categorias.ts -> CRUD de las categorias
-| |--pedidos.ts -> crear Pedidos
-| |--auth.ts -> login / logout
+| |--productos.actions.ts -> CRUD de los productos
+| |--categorias.actions.ts -> CRUD de las categorias
+| |--pedidos.actions.ts -> crear Pedidos
+| |--auth.actions.ts -> login / logout
 |
 |--store/
 | |--useCarrito -> Estado del carrito (Zunstand)

@@ -1,0 +1,6 @@
+export * from './Categoria'
+export * from './Egreso'
+export * from './MovProducto'
+export * from './Pedido'
+export * from './Producto'
+export * from './TipoEgreso'

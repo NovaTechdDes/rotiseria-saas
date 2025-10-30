@@ -1,10 +1,21 @@
-import React from 'react'
 
-const RotiseriaPage = ({params}: {params: {rotiseria: string}}) => {
-    const { rotiseria } = params;
+import React from 'react'
+import { useRotiseriaByDominio } from '@/hooks';
+
+import { Header } from '@/components/carta/Header';
+
+interface Props {
+  params: { rotiseria: string }
+}
+
+const RotiseriaPage = ({ params }: Props) => {
 
   return (
-    <div>RotiseriaPage</div>
+    <div className='h-screen bg-white text-black'>
+
+      <Header rotiseria={params.rotiseria} />
+
+    </div>
   )
 }
 

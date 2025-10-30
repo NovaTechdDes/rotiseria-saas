@@ -1,0 +1,27 @@
+import React from 'react'
+import { LucideIcon } from 'lucide-react'
+
+interface Props {
+    tipo?: 'primary';
+    texto?: string;
+    icon?: LucideIcon;
+};
+
+export const Button = ({ tipo, texto = '', icon: Icon }: Props) => {
+
+    if (tipo === 'primary') {
+        return (
+            <button className="border rounded-sm px-2 py-1 font-semibold bg-orange-500 text-white border-orange-300 cursor-pointer hover:bg-orange-600">
+                {Icon && <Icon className="w-6 h-6 text-primary" />}
+                {texto}
+            </button>
+        );
+    };
+
+    return (
+        <button className="border rounded-sm px-2 py-1 font-semibold text-slate-700 border-gray-300 cursor-pointer hover:bg-orange-100">
+            {Icon && <Icon className="w-6 h-6 text-primary" />}
+            {texto}
+        </button>
+    )
+}
