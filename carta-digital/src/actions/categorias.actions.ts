@@ -4,13 +4,13 @@ import Swal from "sweetalert2";
 
 export const categoriasActions = () => {
 
-    const startGetCategorias = async (): Promise<Categoria[] | false> => {
-        const { data, error } = await supabase.from('categoria').select();
+    const startGetCategoriasByRotiseriaId = async (id: number): Promise<Categoria[] | []> => {
+        const { data, error } = await supabase.from('Categoria').select().eq('rotiseriaId', id);
 
         if (error) {
-            Swal.fire('Error al obtener las categorias', error.message, 'error');
+            await Swal.fire('Error al obtener las categorias', error.message, 'error');
 
-            return false;
+            return [];
         };
 
         return data;
@@ -65,7 +65,7 @@ export const categoriasActions = () => {
     };
 
     return {
-        startGetCategorias,
+        startGetCategoriasByRotiseriaId,
         startPostCategoria,
         startUpdateCategoria,
         startDeleteCategoria

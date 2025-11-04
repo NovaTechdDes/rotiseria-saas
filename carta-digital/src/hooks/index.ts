@@ -14,3 +14,6 @@ export * from './rotiserias/useRotiseriaByDominio';
 
 export * from './tipoEgresos/useMutateTipoEgresos';
 export * from './tipoEgresos/useTipoEgresos';
+
+
+export * from './auth/useAuth';

@@ -1,6 +1,6 @@
 export interface Categoria {
-    id?: Number;
+    id?: number;
     created_at: Date;
     nombre: string;
-    rotiseriaId: Number;
+    rotiseriaId: number;
 }

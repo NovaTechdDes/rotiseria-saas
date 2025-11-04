@@ -3,18 +3,28 @@ import { useRotiseriaByDominio } from "@/hooks";
 import { Button } from "../ui/Button"
 import Image from "next/image";
 import { Clock, Map, MapPin, Phone, ShoppingCart } from "lucide-react";
+import { Rotiseria } from "@/interface/Rotiseria";
+import { useCarritoStore } from "@/store/useCarritoStore";
+import { useRouter } from "next/navigation";
 
 interface Props {
-    rotiseria: string;
-}
+    rotiseria: Rotiseria;
+};
+
+
 
 export const Header = ({ rotiseria }: Props) => {
+    const router = useRouter();
+    const { nombre, direccion, horario, logo, telefono } = rotiseria;
+    const { openModal, productos } = useCarritoStore()
 
-    const { data, isLoading } = useRotiseriaByDominio(rotiseria);
+    const navegarLogin = () => {
+        router.push('/login');
+    }
 
-    if (!data) return;
-
-    const { nombre, direccion, horario, logo, telefono } = data;
+    const handleOpenModal = () => {
+        openModal()
+    };
 
     return (
         <header className="flex px-5 justify-between border-gray-200 shadow-2xl border-b py-5">
@@ -44,8 +54,15 @@ export const Header = ({ rotiseria }: Props) => {
 
 
             <div className="flex gap-2 items-start">
-                <Button texto="Panel Admin" />
-                <Button icon={ShoppingCart} tipo="primary" />
+                <div onClick={navegarLogin}>
+                    <Button texto="Panel Admin" />
+                </div>
+                <div onClick={handleOpenModal}>
+                    <Button icon={ShoppingCart} tipo="primary" />
+                    {productos && productos?.length > 0 && (
+                        <span className="inline-flex items-center justify-center ml-2 px-2 py-0.5 text-xs font-bold leading-none text-white bg-orange-600 rounded-full">{productos.length}</span>
+                    )}
+                </div>
             </div>
         </header>
     )

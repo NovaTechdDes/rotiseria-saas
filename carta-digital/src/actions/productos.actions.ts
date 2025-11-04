@@ -4,26 +4,26 @@ import Swal from "sweetalert2";
 
 export const productsActions = () => {
 
-    const startGetProductos = async (): Promise<Producto[] | false> => {
+    const startGetProductosByRotiseriaId = async (id: number): Promise<Producto[] | []> => {
         try {
-            const { error, data } = await supabase.from('producto').select();
-
+            const { error, data } = await supabase.from('Producto').select('*, Categoria(id, nombre)').eq('rotiseriaId', id);
+            console.log(data)
             if (error) {
                 await Swal.fire('Error al obtener los productos', error.message, 'error');
-                return false;
+                return [];
             };
 
             return data;
         } catch (error: any) {
             await Swal.fire('Error inesperado al obtener los productos', error.message, 'error');
-            return false;
+            return [];
         };
     };
 
     const startPostProducto = async (producto: Producto): Promise<boolean> => {
 
         try {
-            const { error } = await supabase.from('producto').insert(producto);
+            const { error } = await supabase.from('Producto').insert(producto);
 
             if (error) {
                 await Swal.fire('Error al crear el producto', error.message, 'error');
@@ -41,7 +41,7 @@ export const productsActions = () => {
 
     const startUpdateProducto = async (producto: Partial<Producto>): Promise<boolean> => {
         try {
-            const { error } = await supabase.from('producto').update(producto).eq('id', producto.id);
+            const { error } = await supabase.from('Producto').update(producto).eq('id', producto.id);
             if (error) {
                 await Swal.fire('Error al actualizar el producto', error.message, 'error');
                 return false;
@@ -55,7 +55,7 @@ export const productsActions = () => {
 
     const startDeleteProducto = async (id: number): Promise<boolean> => {
         try {
-            const { error } = await supabase.from('producto').delete().eq('id', id);
+            const { error } = await supabase.from('Producto').delete().eq('id', id);
             if (error) {
                 await Swal.fire('Error al eliminar el producto', error.message, 'error');
                 return false;
@@ -69,7 +69,7 @@ export const productsActions = () => {
 
     return {
         startDeleteProducto,
-        startGetProductos,
+        startGetProductosByRotiseriaId,
         startPostProducto,
         startUpdateProducto
     };

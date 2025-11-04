@@ -1,3 +1,5 @@
+import { Categoria } from "./Categoria";
+
 export interface Producto {
     id?: number;
     created_at: Date;
@@ -8,4 +10,5 @@ export interface Producto {
     activo: boolean;
     categoriaId: number;
     rotiseriaId: number;
+    Categoria?: Categoria;
 };
