@@ -23,7 +23,7 @@ const Login = () => {
     };
 
     if (user) {
-        router.push('/dashboard')
+        router.push('/pedidos')
     }
 
     return (

@@ -20,7 +20,9 @@ export const loginSupabase = async (email: string, password: string) => {
 export const userAuthenticated = async () => {
     try {
         const { data } = await supabase.auth.getUser();
-        const { data: session } = await supabase.auth.getSession();
+
+        const { data: user } = await supabase.from('usuario').select();
+        console.log(user)
     } catch (error: any) {
         console.log(error);
         await Swal.fire('Error inesperado al obtener el usuario', error.message, 'error');

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRotiseriaByDominio } from '@/hooks';
 
 import { Header } from '@/components/carta/Header';
@@ -7,25 +7,25 @@ import { Categorias } from '@/components/carta/Categorias';
 import { Productos } from '@/components/carta/Productos';
 import { useCarritoStore } from '@/store/useCarritoStore';
 import { ModalCarrito } from '@/components/carta/ModalCarrito';
+import { useRotiseriaStore } from '@/store/useRotiseriaStore';
+import Loading from '@/components/ui/Loading';
 
-const RotiseriaPage = ({ params }: { params: Promise<{ rotiseria: string }> }) => {
-  const { rotiseria } = React.use(params);
-  const { data } = useRotiseriaByDominio(rotiseria);
-  const { modalAbierto } = useCarritoStore()
+const RotiseriaPage = () => {
+  const { modalAbierto } = useCarritoStore();
+  const { rotiseriaActive } = useRotiseriaStore();
 
-  if (!data) {
-    return <div>Cargando...</div>
-  }
-
+  if (!rotiseriaActive) {
+    return <Loading texto='Cargando...' />
+  };
 
   return (
     <div className='h-screen bg-slate-200 text-black'>
 
-      <Header rotiseria={data} />
+      <Header rotiseria={rotiseriaActive} />
 
-      <Categorias rotiseria={data} />
+      <Categorias rotiseria={rotiseriaActive} />
 
-      <Productos rotiseria={data} />
+      <Productos rotiseria={rotiseriaActive} />
 
 
       {modalAbierto && <ModalCarrito />}

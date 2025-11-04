@@ -1,3 +1,4 @@
+'use client'
 import { loginSupabase, userAuthenticated } from "@/actions";
 import { supabase } from "@/lib/supabase";
 import { useState } from "react";

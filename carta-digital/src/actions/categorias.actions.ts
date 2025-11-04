@@ -1,6 +1,7 @@
 import { Categoria } from "@/interface";
 import { supabase } from "@/lib/supabase";
 import Swal from "sweetalert2";
+import { userAuthenticated } from "./auth.actions";
 
 export const categoriasActions = () => {
 
@@ -18,7 +19,7 @@ export const categoriasActions = () => {
 
     const startPostCategoria = async (categoria: Categoria): Promise<boolean> => {
         try {
-            const { error } = await supabase.from('categoria').insert(categoria);
+            const { error } = await supabase.from('Categoria').insert(categoria);
 
             if (error) {
                 await Swal.fire('Error al crear categoria', error.message, 'error');
@@ -34,7 +35,7 @@ export const categoriasActions = () => {
 
     const startUpdateCategoria = async (categoria: Partial<Categoria>): Promise<boolean> => {
         try {
-            const { error } = await supabase.from('categoria').update(categoria).eq('id', categoria.id);
+            const { error } = await supabase.from('Categoria').update(categoria).eq('id', categoria.id);
             if (error) {
                 await Swal.fire('Error al actualizar categoria', error.message, 'error');
                 return false;
@@ -49,7 +50,7 @@ export const categoriasActions = () => {
 
     const startDeleteCategoria = async (id: number): Promise<boolean> => {
         try {
-            const { error } = await supabase.from('categoria').delete().eq('id', id);
+            const { data, error } = await supabase.from('Categoria').delete().eq('id', id);
 
             if (error) {
                 await Swal.fire('Error al eliminar la categoria', error.message, 'error');

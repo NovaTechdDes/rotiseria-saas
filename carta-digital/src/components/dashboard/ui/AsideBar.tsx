@@ -2,12 +2,15 @@
 import { useAuth } from '@/hooks'
 import { ArrowLeft, LayoutDashboard, LogOut } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import React from 'react'
+import NavLink from './NavLink'
 
 const AsideBar = () => {
+    const pathName = usePathname();
     const router = useRouter();
     const { logOut: cerrarSesion } = useAuth();
+
 
     const handleLogOut = () => {
         cerrarSesion();
@@ -25,19 +28,19 @@ const AsideBar = () => {
                     <nav>
                         <ul className="space-y-4">
                             <li>
-                                <a href="/dashboard/pedidos" className="block text-gray-600 hover:text-orange-600 font-medium">
+                                <NavLink href="/pedidos" activePath={pathName} >
                                     Pedidos
-                                </a>
+                                </NavLink>
                             </li>
                             <li>
-                                <a href="/dashboard/productos" className="block text-gray-600 hover:text-orange-600 font-medium">
+                                <NavLink href='productos' activePath={pathName} >
                                     Productos
-                                </a>
+                                </NavLink>
                             </li>
                             <li>
-                                <a href="/dashboard/categorias" className="block text-gray-600 hover:text-orange-600 font-medium">
+                                <NavLink href="/categorias" activePath={pathName}>
                                     Categorías
-                                </a>
+                                </NavLink>
                             </li>
                         </ul>
                     </nav>
@@ -45,9 +48,9 @@ const AsideBar = () => {
                 <div>
                     <ul className="space-y-3 mb-4">
                         <li>
-                            <Link href="/dashboard/configuracion" className="block text-gray-600 hover:text-orange-600 font-medium">
+                            <NavLink href="/configuracion" activePath={pathName}>
                                 Configuración
-                            </Link>
+                            </NavLink>
                         </li>
                         <li>
                             <Link href="/" className="flex gap-2 justify-center items-center rounded-sm border border-slate-500 text-gray-600 hover:text-white hover:bg-orange-600 font-medium">
