@@ -1,5 +1,6 @@
 'use client'
 import { CategoriaElement } from '@/components/dashboard/categoria/CategoriaElement';
+import { HeaderDashboard } from '@/components/dashboard/ui/HeaderDashboard';
 import { Button } from '@/components/ui/Button';
 import Loading from '@/components/ui/Loading';
 import { useCategorias, useMutateCategorias } from '@/hooks'
@@ -10,6 +11,7 @@ import Swal from 'sweetalert2';
 
 const Categoria = () => {
     const { rotiseriaActive } = useRotiseriaStore();
+    console.log(rotiseriaActive)
     const { data: categorias, isLoading } = useCategorias(rotiseriaActive ? rotiseriaActive.id : 0);
     const { agregarCategoria } = useMutateCategorias();
     const { mutateAsync: agregar, isPending } = agregarCategoria;
@@ -39,16 +41,7 @@ const Categoria = () => {
                     <span className="text-orange-600 font-semibold text-lg animate-pulse">Agregando categoría...</span>
                 </div>
             )}
-            <header className='flex justify-between items-center'>
-                <div>
-                    <h1 className='text-3xl font-semibold text-orange-500'>Categorias</h1>
-                    <p className='text-lg'>Total: {categorias?.length} categorias</p>
-                </div>
-
-                <div className='rounded-lg' onClick={handleAdd}>
-                    <Button texto='Nueva Categoria' icon={Plus} tipo='primary' />
-                </div>
-            </header>
+            <HeaderDashboard handleAdd={handleAdd} lista={categorias} seccion='categorias' textoBoton='Agregar Categorias' titulo='Categorias' />
             <main className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mt-10 gap-5'>
                 {categorias?.map(categoria => (
                     <CategoriaElement categoria={categoria} key={categoria.id} />

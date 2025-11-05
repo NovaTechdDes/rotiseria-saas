@@ -7,6 +7,8 @@ interface Props {
     rotiseria: Rotiseria;
 };
 
+//TODO BUSCADOR
+
 export const Productos = ({ rotiseria }: Props) => {
 
     const { data: productos, isLoading } = useProductos(rotiseria.id);

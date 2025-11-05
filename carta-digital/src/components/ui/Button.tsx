@@ -5,9 +5,10 @@ interface Props {
     tipo?: 'primary' | 'delete';
     texto?: string;
     icon?: LucideIcon;
+    disabled?: boolean
 };
 
-export const Button = ({ tipo, texto = '', icon: Icon }: Props) => {
+export const Button = ({ tipo, texto = '', icon: Icon, disabled = false, }: Props) => {
 
     if (tipo === 'primary') {
         return (
@@ -20,7 +21,7 @@ export const Button = ({ tipo, texto = '', icon: Icon }: Props) => {
 
     if (tipo === 'delete') {
         return (
-            <button className="border w-full flex gap-2 items-center justify-center rounded-lg  px-2 py-1 font-semibold text-slate-700 border-gray-300 cursor-pointer hover:bg-orange-100">
+            <button disabled={disabled} className="border w-full flex gap-2 items-center justify-center rounded-lg  px-2 py-1 font-semibold text-slate-700 border-gray-300 cursor-pointer hover:bg-orange-100">
                 {Icon && <Icon className="w-6 h-6 text-red-500" />}
                 {texto}
             </button>

@@ -7,7 +7,7 @@ export const productsActions = () => {
     const startGetProductosByRotiseriaId = async (id: number): Promise<Producto[] | []> => {
         try {
             const { error, data } = await supabase.from('Producto').select('*, Categoria(id, nombre)').eq('rotiseriaId', id);
-            console.log(data)
+
             if (error) {
                 await Swal.fire('Error al obtener los productos', error.message, 'error');
                 return [];
@@ -23,7 +23,22 @@ export const productsActions = () => {
     const startPostProducto = async (producto: Producto): Promise<boolean> => {
 
         try {
-            const { error } = await supabase.from('Producto').insert(producto);
+            let imagen = '';
+            if (producto.imagenFile) {
+                const { data, error: errorPostImage } = await supabase.storage.from('productos').upload(`${Date.now()}-${producto?.imagenFile.name}`, producto.imagenFile)
+                if (errorPostImage) {
+                    await Swal.fire('Error al subir imagen', errorPostImage.message, 'error');
+                    return false;
+                };
+
+                const { data: publicURL } = await supabase.storage.from('productos').getPublicUrl(data.path);
+                imagen = publicURL.publicUrl;
+            }
+            const { imagenFile, ...productoSinFile } = producto
+            const { error } = await supabase.from('Producto').insert({
+                ...productoSinFile,
+                imagen: imagen
+            });
 
             if (error) {
                 await Swal.fire('Error al crear el producto', error.message, 'error');
@@ -41,7 +56,8 @@ export const productsActions = () => {
 
     const startUpdateProducto = async (producto: Partial<Producto>): Promise<boolean> => {
         try {
-            const { error } = await supabase.from('Producto').update(producto).eq('id', producto.id);
+            const { Categoria, ...productoSinCategoria } = producto
+            const { error } = await supabase.from('Producto').update(productoSinCategoria).eq('id', producto.id);
             if (error) {
                 await Swal.fire('Error al actualizar el producto', error.message, 'error');
                 return false;

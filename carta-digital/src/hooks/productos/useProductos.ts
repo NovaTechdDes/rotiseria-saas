@@ -5,7 +5,7 @@ const { startGetProductosByRotiseriaId } = productsActions();
 
 export const useProductos = (id: number) => {
     return useQuery({
-        queryKey: ['productos'],
+        queryKey: ['productos', id],
         queryFn: () => startGetProductosByRotiseriaId(id),
         staleTime: 1000 * 60 * 60,
     });

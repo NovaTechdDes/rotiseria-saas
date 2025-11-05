@@ -9,7 +9,7 @@ interface Props {
 
 const NavLink = ({ href, activePath, children }: Props) => {
     return (
-        <Link href={href} className={`px-3 py-2 rounded-md font-medium transition-colors ${activePath === href
+        <Link href={href} className={`px-3 flex gap-2 py-2 rounded-md font-medium transition-colors  ${activePath === href
             ? "bg-orange-500 text-white"
             : "text-gray-800 hover:bg-gray-700 hover:text-white"
             }`}>

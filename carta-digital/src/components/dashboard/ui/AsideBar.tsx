@@ -1,6 +1,6 @@
 'use client'
 import { useAuth } from '@/hooks'
-import { ArrowLeft, LayoutDashboard, LogOut } from 'lucide-react'
+import { ArrowLeft, FolderOpen, LayoutDashboard, LogOut, Package, ShoppingBag } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import React from 'react'
@@ -28,17 +28,20 @@ const AsideBar = () => {
                     <nav>
                         <ul className="space-y-4">
                             <li>
-                                <NavLink href="/pedidos" activePath={pathName} >
+                                <NavLink href="/pedidos" activePath={pathName}>
+                                    <ShoppingBag size={20} />
                                     Pedidos
                                 </NavLink>
                             </li>
-                            <li>
-                                <NavLink href='productos' activePath={pathName} >
+                            <li >
+                                <NavLink href='/productos' activePath={pathName} >
+                                    <Package size={20} />
                                     Productos
                                 </NavLink>
                             </li>
                             <li>
                                 <NavLink href="/categorias" activePath={pathName}>
+                                    <FolderOpen size={20} />
                                     Categorías
                                 </NavLink>
                             </li>
