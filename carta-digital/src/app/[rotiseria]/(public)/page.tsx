@@ -9,9 +9,10 @@ import { useCarritoStore } from '@/store/useCarritoStore';
 import { ModalCarrito } from '@/components/carta/ModalCarrito';
 import { useRotiseriaStore } from '@/store/useRotiseriaStore';
 import Loading from '@/components/ui/Loading';
+import ModalClienteCarrito from '@/components/carta/ModalClienteCarrito';
 
 const RotiseriaPage = () => {
-  const { modalAbierto } = useCarritoStore();
+  const { modalAbierto, modalClienteCarrito } = useCarritoStore();
   const { rotiseriaActive } = useRotiseriaStore();
 
   if (!rotiseriaActive) {
@@ -29,6 +30,7 @@ const RotiseriaPage = () => {
 
 
       {modalAbierto && <ModalCarrito />}
+      {modalClienteCarrito && <ModalClienteCarrito />}
 
     </div>
   )

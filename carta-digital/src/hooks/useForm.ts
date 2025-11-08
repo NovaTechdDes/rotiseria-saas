@@ -1,3 +1,5 @@
+import { Producto } from '@/interface';
+import { ListaProductos } from '@/store';
 import { useEffect, useState, type ChangeEvent } from 'react';
 
 type InputChage =
@@ -5,7 +7,7 @@ type InputChage =
     | {
         target: {
             name: string,
-            value: string | number
+            value: string | number | ListaProductos[]
         }
     }
 

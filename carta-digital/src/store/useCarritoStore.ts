@@ -1,7 +1,8 @@
 import { Producto } from "@/interface";
 import { create } from "zustand";
 
-interface ListaProductos {
+
+export interface ListaProductos {
     producto: Producto,
     cantidad: number
 }
@@ -18,6 +19,10 @@ interface CarritoStore {
     modalAbierto: boolean;
     openModal: () => void;
     closeModal: () => void;
+
+    modalClienteCarrito: boolean;
+    openModalClienteCarrito: () => void;
+    closeModalClienteCarrito: () => void;
 };
 
 const calcularTotal = (productos: ListaProductos[]): number => {
@@ -25,11 +30,10 @@ const calcularTotal = (productos: ListaProductos[]): number => {
     return productos.reduce((acum, item) => acum + (item.cantidad * (item.producto.precio ?? 0)), 0);
 };
 
-
-
 export const useCarritoStore = create<CarritoStore>((set) => ({
     total: 0,
     productos: null,
+
     setProductos: (producto) => {
         set((state) => {
             const existe = state.productos?.find(elem => elem.producto.id === producto.producto.id);
@@ -51,7 +55,6 @@ export const useCarritoStore = create<CarritoStore>((set) => ({
             };
         })
     },
-
     addItem: (id) => {
         set((state) => {
             const existe = state.productos?.find(elem => elem.producto.id === id);
@@ -95,7 +98,11 @@ export const useCarritoStore = create<CarritoStore>((set) => ({
     }),
     closeModal: () => set({
         modalAbierto: false
-    })
+    }),
+
+    modalClienteCarrito: false,
+    openModalClienteCarrito: () => set({ modalClienteCarrito: true, modalAbierto: false }),
+    closeModalClienteCarrito: () => set({ modalClienteCarrito: false }),
 
 
 }))

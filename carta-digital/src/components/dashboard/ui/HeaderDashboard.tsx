@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/Button'
-import { Categoria, Producto } from '@/interface'
+import { Categoria, Pedido, Producto } from '@/interface'
 import { Plus } from 'lucide-react';
 import React from 'react'
 
 interface Props {
-    lista: Categoria[] | Producto[] | undefined;
+    lista: Categoria[] | Producto[] | Pedido[] | undefined;
     handleAdd: () => void;
     seccion: string;
     textoBoton: string;

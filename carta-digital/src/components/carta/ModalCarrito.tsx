@@ -1,12 +1,16 @@
 import { useCarritoStore } from '@/store/useCarritoStore'
-import { ClosedCaption, Send, ShoppingCart, X } from 'lucide-react';
+import { Send, ShoppingCart, X } from 'lucide-react';
 import React from 'react'
 import { ProductoModal } from './ProductoModal';
 import { Button } from '../ui/Button';
 
 export const ModalCarrito = () => {
 
-    const { productos, closeModal, total } = useCarritoStore();
+    const { productos, closeModal, total, openModalClienteCarrito } = useCarritoStore();
+
+    const handleModalClienteCarrito = () => {
+        openModalClienteCarrito()
+    };
 
     const handleCloseModal = () => {
         closeModal();
@@ -40,7 +44,7 @@ export const ModalCarrito = () => {
                             </div>
 
 
-                            <div className='w-full mt-10'>
+                            <div className='w-full mt-10' onClick={handleModalClienteCarrito}>
                                 <Button texto='Confirmar Pedido' icon={Send} tipo='primary' />
                             </div>
                         </>

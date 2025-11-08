@@ -6,7 +6,7 @@ import { userAuthenticated } from "./auth.actions";
 export const categoriasActions = () => {
 
     const startGetCategoriasByRotiseriaId = async (id: number): Promise<Categoria[] | []> => {
-        console.log(id)
+
         const { data, error } = await supabase.from('Categoria').select().eq('rotiseriaId', id);
 
         if (error) {
