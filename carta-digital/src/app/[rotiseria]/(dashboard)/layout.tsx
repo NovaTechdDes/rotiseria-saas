@@ -8,10 +8,12 @@ import React, { useEffect } from 'react'
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
     return (
-        <div className='flex min-h-screen'>
+        <div className="flex min-h-screen">
             <AsideBar />
-            <main className='flex-1 p-6 bg-gray-50'>{children}</main>
-        </div>
+            <main className="p-6 bg-gray-50 ml-[200px] fiex-1 w-full">
+                {children}
+            </main>
+        </div >
     )
 }
 

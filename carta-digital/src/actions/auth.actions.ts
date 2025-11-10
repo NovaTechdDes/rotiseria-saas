@@ -21,8 +21,8 @@ export const userAuthenticated = async () => {
     try {
         const { data } = await supabase.auth.getUser();
 
-        const { data: user } = await supabase.from('usuario').select();
-        console.log(user)
+        const { data: user } = await supabase.from('usuario').select().single();
+        return user
     } catch (error: any) {
         console.log(error);
         await Swal.fire('Error inesperado al obtener el usuario', error.message, 'error');

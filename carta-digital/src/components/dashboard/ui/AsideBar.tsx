@@ -18,8 +18,8 @@ const AsideBar = () => {
     };
 
     return (
-        <aside>
-            <div className="flex flex-col h-full justify-between py-8 px-4 border-r border-gray-700 w-[200px] bg-white shadow-md min-h-full">
+        <aside className="bg-white border-r fixed shadow-md border-gray-700 z-20" >
+            <div className="flex flex-col justify-between py-8 px-4 w-[200px] bg-white h-[100dvh]">
                 <div>
                     <div className='flex text-orange-500 gap-5'>
                         <LayoutDashboard />

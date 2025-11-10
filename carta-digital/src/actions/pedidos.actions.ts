@@ -8,7 +8,12 @@ export const pedidosActions = () => {
     const startGetPedidos = async (id: number): Promise<Pedido[] | []> => {
         try {
 
-            const { data, error } = await supabase.from('Pedido').select().eq('rotiseriaId', id);
+            const { data, error } = await supabase
+                .from('Pedido')
+                .select('*, movProductos:MovProducto(*)')
+                .eq('rotiseriaId', id)
+                .eq('mostrar', true)
+                .order('created_at', { ascending: false });
 
             if (error) {
                 await Swal.fire('Error al obtener los pedidos', error.message, 'error');
@@ -23,7 +28,7 @@ export const pedidosActions = () => {
         };
     };
 
-    const startPostPedido = async (pedido: Pedido, productos: Producto[]): Promise<boolean> => {
+    const startPostPedido = async (pedido: Pedido): Promise<boolean> => {
         try {
             const { data: dataUser, error: errorUser } = await supabase.auth.getUser();
 
@@ -37,6 +42,7 @@ export const pedidosActions = () => {
             const productosPlanos = pedido.productos?.map(item => ({
                 cantidad: item.cantidad,
                 precioUnitario: item.producto.precio,
+                descripcion: item.producto.nombre,
                 productoId: item.producto.id,
                 rotiseriaId: item.producto.rotiseriaId
             }))
@@ -71,7 +77,8 @@ export const pedidosActions = () => {
 
     const startUpdatePedido = async (pedido: Partial<Pedido>): Promise<boolean> => {
         try {
-            const { error } = await supabase.from('Pedido').update(pedido).eq('id', pedido.id);
+            const { movProductos, ...pedidoSinMov } = pedido
+            const { error } = await supabase.from('Pedido').update(pedidoSinMov).eq('id', pedido.id);
 
             if (error) {
                 await Swal.fire('Error al actualizar el pedido', error.message, 'error');
@@ -87,7 +94,7 @@ export const pedidosActions = () => {
 
     const startDeletePedido = async (id: number): Promise<boolean> => {
         try {
-            const { error } = await supabase.from('Pedido').delete().eq('id', id);
+            const { error } = await supabase.from('Pedido').update({ mostrar: false }).eq('id', id);
 
             if (error) {
                 await Swal.fire('Error al eliminar el porducto', error.message, 'error');

@@ -26,7 +26,10 @@ const ProductCard = ({ producto, carta = true }: Props) => {
         return;
     };
 
-    if (!producto.nombre.toUpperCase().startsWith(filtro.toUpperCase()) || !producto.Categoria?.nombre.toUpperCase().startsWith(filtro.toUpperCase())) {
+    if (
+        !producto.nombre.toUpperCase().includes(filtro.toUpperCase()) &&
+        !producto.Categoria?.nombre.toUpperCase().includes(filtro.toUpperCase())
+    ) {
         return;
     };
 

@@ -5,7 +5,7 @@ const { startGetPedidos } = pedidosActions();
 
 export const usePedidos = (id: number) => {
     return useQuery({
-        queryKey: ['pedidos'],
+        queryKey: ['pedidos', id],
         queryFn: () => startGetPedidos(id),
         staleTime: 1000 * 60 * 60,
     });

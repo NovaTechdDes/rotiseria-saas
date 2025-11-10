@@ -23,6 +23,8 @@ interface CarritoStore {
     modalClienteCarrito: boolean;
     openModalClienteCarrito: () => void;
     closeModalClienteCarrito: () => void;
+
+    resetCarrito: () => void;
 };
 
 const calcularTotal = (productos: ListaProductos[]): number => {
@@ -103,6 +105,12 @@ export const useCarritoStore = create<CarritoStore>((set) => ({
     modalClienteCarrito: false,
     openModalClienteCarrito: () => set({ modalClienteCarrito: true, modalAbierto: false }),
     closeModalClienteCarrito: () => set({ modalClienteCarrito: false }),
+
+    resetCarrito: () => set({
+        total: 0,
+        modalAbierto: false,
+        productos: null,
+    })
 
 
 }))

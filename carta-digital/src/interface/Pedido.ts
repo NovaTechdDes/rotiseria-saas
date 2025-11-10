@@ -1,5 +1,6 @@
 import { ListaProductos } from "@/store";
 import { Producto } from "./Producto";
+import { MovProducto } from "./MovProducto";
 
 export interface Pedido {
     id?: number;
@@ -16,5 +17,6 @@ export interface Pedido {
     usuarioId: number;
     rotiseriaId: number;
     productos?: ListaProductos[];
-
+    movProductos?: MovProducto[];
+    mostrar: boolean;
 }

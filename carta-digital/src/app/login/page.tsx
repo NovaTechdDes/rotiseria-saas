@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useEffectEvent, useState } from 'react'
 import { ArrowLeft, ArrowLeftIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks';
@@ -7,10 +7,18 @@ import { supabase } from '@/lib/supabase';
 
 const Login = () => {
     const router = useRouter();
-    const { login, user } = useAuth();
+    const { login, user, verificarAutenticacion } = useAuth();
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+
+    useEffect(() => {
+        verificarAutenticacion()
+        if (user) {
+            router.push('/pedidos')
+        }
+    }, [user, router])
+
 
     const handleBack = () => {
         router.back();
@@ -21,10 +29,6 @@ const Login = () => {
 
         login(email, password)
     };
-
-    if (user) {
-        router.push('/pedidos')
-    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">

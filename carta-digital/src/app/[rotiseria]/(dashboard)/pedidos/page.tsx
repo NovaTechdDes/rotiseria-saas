@@ -1,4 +1,5 @@
 'use client'
+import PedidoCard from '@/components/dashboard/pedido/PedidoCard'
 import SinPedidos from '@/components/dashboard/pedido/SinPedidos'
 import { HeaderDashboard } from '@/components/dashboard/ui/HeaderDashboard'
 import Loading from '@/components/ui/Loading'
@@ -23,15 +24,17 @@ const Pedido = () => {
         <div className='text-black'>
             <HeaderDashboard titulo='Pedido' handleAdd={handleAdd} lista={pedidos} seccion='pedidos' textoBoton='Agregar Pedido' />
 
-            {
-                pedidos.length === 0 ? (
-                    <SinPedidos />
-                ) : (
-                    pedidos?.map(pedido => (
-                        <p>Hola</p>
-                    ))
-                )
-            }
+            <div className='flex flex-col gap-5'>
+                {
+                    pedidos.length === 0 ? (
+                        <SinPedidos />
+                    ) : (
+                        pedidos?.map(pedido => (
+                            <PedidoCard key={pedido.id} pedido={pedido} />
+                        ))
+                    )
+                }
+            </div>
         </div>
     )
 }

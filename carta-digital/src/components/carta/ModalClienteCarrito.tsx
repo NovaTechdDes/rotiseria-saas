@@ -16,12 +16,13 @@ const initialState: Pedido = {
     estado: 'pendiente',
     total: 0,
     usuarioId: 0,
-    rotiseriaId: 0
+    rotiseriaId: 0,
+    mostrar: true
 }
 
 const ModalClienteCarrito = () => {
     const { rotiseriaActive } = useRotiseriaStore();
-    const { closeModalClienteCarrito, total: totalCarrito, productos } = useCarritoStore()
+    const { closeModalClienteCarrito, resetCarrito, total: totalCarrito, productos } = useCarritoStore()
     const { onInputChange, formState, onResetForm, rotiseriaId, total, estado, cliente, direccion, telefono, tipoPago, vuelto, observaciones, envio } = useForm(initialState);
     const [formularioValido, setFormularioValido] = useState<boolean>(false);
     const { agregarPedido } = useMutatePedidos();
@@ -59,6 +60,7 @@ const ModalClienteCarrito = () => {
         const ok = await agregar(formState);
 
         if (ok) {
+            resetCarrito();
             onResetForm();
             closeModalClienteCarrito()
         };
@@ -175,7 +177,7 @@ const ModalClienteCarrito = () => {
                     }
 
                     <div className='col-span-2 mt-2'>
-                        <Button texto={formularioValido ? 'Confirmar Pedido' : 'Completar los campos obligatorios *'} tipo='primary' disabled={!formularioValido} />
+                        <Button texto={formularioValido ? isPending ? 'Confirmando...' : 'Confirmar Pedido' : 'Completar los campos obligatorios *'} tipo='primary' disabled={!formularioValido} />
                     </div>
                 </form>
             </div>
