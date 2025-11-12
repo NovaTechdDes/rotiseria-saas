@@ -10,10 +10,11 @@ import { useProductoStore } from '@/store'
 
 interface Props {
     producto: Producto,
-    carta?: boolean
+    carta?: boolean,
+    buscador: string;
 }
 
-const ProductCard = ({ producto, carta = true }: Props) => {
+const ProductCard = ({ producto, carta = true, buscador = '' }: Props) => {
 
     const { setProductos } = useCarritoStore();
     const { categoriaSeleccionada } = useCategoriaStore();
@@ -25,6 +26,8 @@ const ProductCard = ({ producto, carta = true }: Props) => {
     if (categoriaSeleccionada !== 0 && categoriaSeleccionada !== producto.categoriaId && carta) {
         return;
     };
+
+    if (!producto.nombre.toUpperCase().includes(buscador)) return;
 
     if (
         !producto.nombre.toUpperCase().includes(filtro.toUpperCase()) &&

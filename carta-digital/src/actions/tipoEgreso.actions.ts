@@ -5,21 +5,21 @@ import Swal from "sweetalert2";
 
 export const tipoEgresosActions = () => {
 
-    const startGetTipoEgreso = async (): Promise<TipoEgreso[] | false> => {
+    const startGetTipoEgreso = async (): Promise<TipoEgreso[]> => {
 
         try {
-            const { data, error } = await supabase.from('tipoEgreso').select();
+            const { data, error } = await supabase.from('TipoEgreso').select();
 
             if (error) {
                 await Swal.fire('Error al obtener los tipos de categorias', error.message, 'error');
-                return false;
+                return [];
             };
 
             return data;
         } catch (error: any) {
 
             await Swal.fire('Error inesperadod al agregar categoria', error.message, 'error')
-            return false;
+            return [];
         };
 
 
@@ -28,7 +28,7 @@ export const tipoEgresosActions = () => {
     const startPostTipoEgreso = async (tipoEgreso: TipoEgreso): Promise<boolean> => {
 
         try {
-            const { error } = await supabase.from('tipoEgreso').insert(tipoEgreso);
+            const { error } = await supabase.from('TipoEgreso').insert(tipoEgreso);
 
             if (error) {
                 await Swal.fire('Errro al cargar Tipo de Egreso', error.message, 'error');
@@ -45,7 +45,7 @@ export const tipoEgresosActions = () => {
 
     const startUpdateTipoEgreso = async (tipoEgreso: TipoEgreso): Promise<boolean> => {
         try {
-            const { error } = await supabase.from('tipoEgreso').update(tipoEgreso).eq('id', tipoEgreso.id);
+            const { error } = await supabase.from('TipoEgreso').update(tipoEgreso).eq('id', tipoEgreso.id);
 
             if (error) {
                 await Swal.fire('Error al modificar Tipo Egreso', error.message, 'error');
@@ -63,7 +63,7 @@ export const tipoEgresosActions = () => {
 
         try {
 
-            const { error } = await supabase.from('tipoEgreso').delete().eq('id', id);
+            const { error } = await supabase.from('TipoEgreso').delete().eq('id', id);
 
             if (error) {
                 await Swal.fire('Error al eliminar el tipo Egreso', error.message, 'error');

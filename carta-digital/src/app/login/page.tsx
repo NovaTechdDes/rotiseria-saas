@@ -7,13 +7,12 @@ import { supabase } from '@/lib/supabase';
 
 const Login = () => {
     const router = useRouter();
-    const { login, user, verificarAutenticacion } = useAuth();
+    const { login, user, verificarAutenticacion, loading } = useAuth();
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
     useEffect(() => {
-        verificarAutenticacion()
         if (user) {
             router.push('/pedidos')
         }
@@ -72,9 +71,9 @@ const Login = () => {
                     </div>
                     <button
                         type="submit"
-                        className="w-full bg-orange-500 text-white py-2 rounded-md font-semibold hover:bg-orange-600 transition-colors"
-                    >
-                        Ingresar
+                        disabled={loading}
+                        className="w-full bg-orange-500 text-white py-2 rounded-md font-semibold hover:bg-orange-600 transition-colors">
+                        {loading ? 'Iniciando Sesion...' : 'Ingresar'}
                     </button>
                 </form>
                 <div className="mt-4 flex justify-between text-sm">

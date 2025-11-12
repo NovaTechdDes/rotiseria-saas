@@ -3,10 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 
 const { startGetEgresos } = egresoActions();
 
-export const useEgresos = () => {
+export const useEgresos = (desde: string, hasta: string) => {
     return useQuery({
-        queryKey: ['egresos'],
-        queryFn: startGetEgresos,
+        queryKey: ['egresos', desde, hasta],
+        queryFn: () => startGetEgresos(desde, hasta),
         staleTime: 1000 * 60 * 60
     });
 };

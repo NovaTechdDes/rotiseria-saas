@@ -1,19 +1,17 @@
 'use client'
-import React, { useEffect } from 'react'
-import { useRotiseriaByDominio } from '@/hooks';
+import React, { useEffect, useState } from 'react'
 
-import { Header } from '@/components/carta/Header';
-import { Categorias } from '@/components/carta/Categorias';
-import { Productos } from '@/components/carta/Productos';
+
 import { useCarritoStore } from '@/store/useCarritoStore';
-import { ModalCarrito } from '@/components/carta/ModalCarrito';
 import { useRotiseriaStore } from '@/store/useRotiseriaStore';
 import Loading from '@/components/ui/Loading';
-import ModalClienteCarrito from '@/components/carta/ModalClienteCarrito';
+import { Categorias, Header, ModalCarrito, ModalClienteCarrito, Productos } from '@/components';
 
 const RotiseriaPage = () => {
   const { modalAbierto, modalClienteCarrito } = useCarritoStore();
   const { rotiseriaActive } = useRotiseriaStore();
+
+  const [buscador, setBuscador] = useState<string>('');
 
   if (!rotiseriaActive) {
     return <Loading texto='Cargando...' />
@@ -24,9 +22,13 @@ const RotiseriaPage = () => {
 
       <Header rotiseria={rotiseriaActive} />
 
+      <div>
+        <input onChange={e => setBuscador(e.target.value.toUpperCase())} type="text" placeholder='Buscar producto por nombre' className='bg-white w-full py-2 font-lg border border-gray-300 rounded-lg mx-10 mt-2 px-2' />
+      </div>
+
       <Categorias rotiseria={rotiseriaActive} />
 
-      <Productos rotiseria={rotiseriaActive} />
+      <Productos buscador={buscador} rotiseria={rotiseriaActive} />
 
 
       {modalAbierto && <ModalCarrito />}

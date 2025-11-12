@@ -20,7 +20,7 @@ const initialState: Pedido = {
     mostrar: true
 }
 
-const ModalClienteCarrito = () => {
+export const ModalClienteCarrito = () => {
     const { rotiseriaActive } = useRotiseriaStore();
     const { closeModalClienteCarrito, resetCarrito, total: totalCarrito, productos } = useCarritoStore()
     const { onInputChange, formState, onResetForm, rotiseriaId, total, estado, cliente, direccion, telefono, tipoPago, vuelto, observaciones, envio } = useForm(initialState);
@@ -183,6 +183,4 @@ const ModalClienteCarrito = () => {
             </div>
         </div>
     )
-}
-
-export default ModalClienteCarrito
+};

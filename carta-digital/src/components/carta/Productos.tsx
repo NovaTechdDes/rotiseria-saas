@@ -5,11 +5,12 @@ import ProductCard from './ProductCard';
 
 interface Props {
     rotiseria: Rotiseria;
+    buscador: string;
 };
 
 //TODO BUSCADOR
 
-export const Productos = ({ rotiseria }: Props) => {
+export const Productos = ({ rotiseria, buscador }: Props) => {
 
     const { data: productos, isLoading } = useProductos(rotiseria.id);
 
@@ -21,7 +22,7 @@ export const Productos = ({ rotiseria }: Props) => {
     return (
         <div className='grid mx-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {productos?.map(producto => (
-                <ProductCard producto={producto} key={producto.id} />
+                <ProductCard buscador={buscador} producto={producto} key={producto.id} />
             ))}
         </div>
     )
