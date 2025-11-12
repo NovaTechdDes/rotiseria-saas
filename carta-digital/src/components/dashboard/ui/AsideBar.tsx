@@ -1,6 +1,6 @@
 'use client'
 import { useAuth } from '@/hooks'
-import { ArrowLeft, DollarSign, FolderOpen, LayoutDashboard, LogOut, Package, ShoppingBag } from 'lucide-react'
+import { ArrowLeft, ChartColumn, DollarSign, FolderOpen, LayoutDashboard, LogOut, Package, ShoppingBag } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import React from 'react'
@@ -49,6 +49,12 @@ const AsideBar = () => {
                                 <NavLink href="/egresos" activePath={pathName}>
                                     <DollarSign size={20} />
                                     Egresos
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink href="/reportes" activePath={pathName}>
+                                    <ChartColumn size={20} />
+                                    Reportes
                                 </NavLink>
                             </li>
                         </ul>

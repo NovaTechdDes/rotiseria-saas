@@ -5,3 +5,4 @@ export * from './productos.actions';
 export * from './rotiserias.actions';
 export * from './tipoEgreso.actions';
 export * from './auth.actions';
+export * from './reportes.actions';

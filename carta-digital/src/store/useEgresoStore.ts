@@ -14,7 +14,7 @@ interface EgresoStore {
     hasta: string;
 
     setDesde: (desde: string) => void;
-    setHasta: (desde: string) => void;
+    setHasta: (hasta: string) => void;
 
     total: number;
     setTotal: (precio: number) => void;
