@@ -1,4 +1,5 @@
 
+import { verificarError } from "@/helpers/erroresTipoEgreso";
 import { TipoEgreso } from "@/interface";
 import { supabase } from "@/lib/supabase";
 import Swal from "sweetalert2";
@@ -48,12 +49,14 @@ export const tipoEgresosActions = () => {
             const { error } = await supabase.from('TipoEgreso').update(tipoEgreso).eq('id', tipoEgreso.id);
 
             if (error) {
+                console.log(error)
                 await Swal.fire('Error al modificar Tipo Egreso', error.message, 'error');
                 return false;
             };
 
             return true;
         } catch (error: any) {
+            console.log(error)
             await Swal.fire('Error inesperdao al modificar el Tipo Egreso', error.message, 'error');
             return false
         };
@@ -66,7 +69,8 @@ export const tipoEgresosActions = () => {
             const { error } = await supabase.from('TipoEgreso').delete().eq('id', id);
 
             if (error) {
-                await Swal.fire('Error al eliminar el tipo Egreso', error.message, 'error');
+                await Swal.fire('Error al eliminar el tipo Egreso', verificarError(error.code), 'error');
+                console.log(error)
                 return false;
             };
 
