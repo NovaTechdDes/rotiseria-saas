@@ -76,10 +76,7 @@ const Login = () => {
                         {loading ? 'Iniciando Sesion...' : 'Ingresar'}
                     </button>
                 </form>
-                <div className="mt-4 flex justify-between text-sm">
-                    <a href="#" className="text-orange-500 hover:underline">¿Olvidaste tu contraseña?</a>
-                    <a href="#" className="text-orange-500 hover:underline">Registrarse</a>
-                </div>
+
             </div>
         </div>
     )

@@ -7,13 +7,14 @@ interface Props {
     categoria: string;
     icon?: LucideIcon;
     porcentaje?: boolean;
+    colorIcon?: string
 }
 
-export const ReporteCard = ({ icon: Icon, subtitulo, texto, categoria, porcentaje }: Props) => {
+export const ReporteCard = ({ icon: Icon, subtitulo, texto, categoria, porcentaje, colorIcon = 'text-green-500' }: Props) => {
     return (
         <div className='bg-white border h-36 border-gray-300 rounded-lg p-5 flex flex-col justify-between'>
             <div className='flex gap-2'>
-                {Icon && <Icon className="w-6 h-6 text-green-500" />}
+                {Icon && <Icon className={`w-6 h-6 ${colorIcon}`} />}
                 <p className='text-gray-500'>{categoria}</p>
             </div>
             <div>

@@ -1,3 +1,4 @@
+'use client'
 import { useReportesForDate } from '@/hooks/reportes/useReportesForDate'
 import { useReporteStore, useRotiseriaStore } from '@/store';
 import React from 'react'

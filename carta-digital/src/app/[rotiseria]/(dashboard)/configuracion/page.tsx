@@ -1,4 +1,5 @@
 import { TipoEgreso } from "@/components/dashboard/configuracion/TipoEgreso"
+import { Usuario } from "@/components/dashboard/configuracion/Usuario"
 import { HeaderDashboard } from "@/components/dashboard/ui/HeaderDashboard"
 
 const Configuracion = () => {
@@ -8,6 +9,8 @@ const Configuracion = () => {
             <HeaderDashboard titulo="Configuracion" />
 
             <TipoEgreso />
+
+            <Usuario />
         </main>
     )
 }

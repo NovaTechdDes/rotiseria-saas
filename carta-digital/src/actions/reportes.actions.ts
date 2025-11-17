@@ -1,3 +1,4 @@
+import { TipoPago } from "@/interface/Reporte";
 import { supabase } from "@/lib/supabase";
 import Swal from "sweetalert2";
 interface ProductosPopulares {
@@ -49,8 +50,33 @@ export const reporteActions = () => {
     };
 
 
+
+    const startGetTipoPagoPedido = async (desde: string, hasta: string, rotiseriaId: number): Promise<TipoPago[]> => {
+        try {
+            const { data, error } = await supabase.rpc('obtener_tipopago_ventas', {
+                p_desde: new Date(desde + "T00:00:00"),
+                p_hasta: new Date(hasta + "T23:59:59"),
+                p_rotiseriaid: rotiseriaId
+            });
+            console.log(data)
+
+            if (error) {
+                await Swal.fire('Error al obtener los tipo de pagos de los pedidos', error.message, 'error');
+                return [];
+            };
+
+            return data;
+        } catch (error: any) {
+            console.log(error);
+            await Swal.fire('Error inesperado al obtener los tipos de los pagos de los pedidos', error.message, 'error');
+            return []
+        }
+    }
+
+
     return {
         startGetReportesForDate,
-        startGetMostPopularProducto
+        startGetMostPopularProducto,
+        startGetTipoPagoPedido
     }
 }

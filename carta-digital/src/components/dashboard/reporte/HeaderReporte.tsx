@@ -1,3 +1,5 @@
+'use client';
+
 import { useReporteStore } from '@/store'
 import React from 'react'
 
