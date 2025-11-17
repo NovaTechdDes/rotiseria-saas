@@ -8,4 +8,5 @@ export interface Rotiseria {
     logo: string;
     telefono: string;
     direccion: string;
+    color: string;
 }

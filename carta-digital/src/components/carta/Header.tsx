@@ -6,6 +6,7 @@ import { Clock, Map, MapPin, Phone, ShoppingCart } from "lucide-react";
 import { Rotiseria } from "@/interface/Rotiseria";
 import { useCarritoStore } from "@/store/useCarritoStore";
 import { useRouter } from "next/navigation";
+import { useRotiseriaStore } from "@/store";
 
 interface Props {
     rotiseria: Rotiseria;
@@ -16,7 +17,8 @@ interface Props {
 export const Header = ({ rotiseria }: Props) => {
     const router = useRouter();
     const { nombre, direccion, horario, logo, telefono } = rotiseria;
-    const { openModal, productos } = useCarritoStore()
+    const { openModal, productos } = useCarritoStore();
+    const { rotiseriaActive } = useRotiseriaStore();
 
     const navegarLogin = () => {
         router.push('/login');
@@ -31,7 +33,7 @@ export const Header = ({ rotiseria }: Props) => {
             <div>
                 <div className="flex items-center gap-5">
                     <Image src={logo} alt={nombre} className="w-15 rounded-lg h-15" width={10} height={10} />
-                    <h1 className="text-orange-700 font-bold text-2xl">Roseria {nombre}</h1>
+                    <h1 className={`text-[${rotiseriaActive?.color}] font-bold text-2xl`}>Roseria {nombre}</h1>
                 </div>
 
                 <div className="mt-5 text-xs flex gap-5">

@@ -1,5 +1,6 @@
 import React from 'react'
 import { LucideIcon } from 'lucide-react'
+import { useRotiseriaStore } from '@/store';
 
 interface Props {
     tipo?: 'primary' | 'delete' | '';
@@ -10,9 +11,12 @@ interface Props {
 };
 
 export const Button = ({ tipo, texto = '', icon: Icon, disabled = false, onClick }: Props) => {
+
+    const { rotiseriaActive } = useRotiseriaStore();
+
     if (tipo === 'primary') {
         return (
-            <button onClick={onClick} disabled={disabled} className="border flex w-full justify-center gap-2 items-center rounded-lg   px-2 py-1 font-semibold bg-orange-500 text-white border-orange-300 cursor-pointer hover:bg-orange-600">
+            <button onClick={onClick} disabled={disabled} className={`border flex w-full justify-center gap-2 items-center rounded-lg   px-2 py-1 font-semibold bg-[${rotiseriaActive?.color}] text-white border-[${rotiseriaActive?.color}] cursor-pointer hover:bg-[${rotiseriaActive?.color}] hover:opacity-90`}>
                 {Icon && <Icon className="w-6 h-6 text-primary" />}
                 {texto}
             </button>

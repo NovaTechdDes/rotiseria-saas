@@ -1,5 +1,7 @@
+'use client'
 import { Button } from '@/components/ui/Button'
 import { Categoria, Egreso, Pedido, Producto } from '@/interface'
+import { useRotiseriaStore } from '@/store';
 import { Plus } from 'lucide-react';
 import React from 'react'
 
@@ -13,10 +15,11 @@ interface Props {
 }
 
 export const HeaderDashboard = ({ lista, handleAdd, seccion, titulo, textoBoton = '' }: Props) => {
+    const { rotiseriaActive } = useRotiseriaStore();
     return (
         <header className='flex justify-between items-center'>
             <div>
-                <h1 className='text-3xl font-semibold text-orange-500'>{titulo}</h1>
+                <h1 className={`text-3xl font-semibold text-[${rotiseriaActive?.color}]`}>{titulo}</h1>
                 {lista && <p className='text-lg'>Total: {lista?.length} {seccion}</p>}
             </div>
 

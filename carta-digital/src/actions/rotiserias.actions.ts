@@ -21,7 +21,7 @@ export const rotiseriasActions = () => {
 
     const startUpdateRotiseria = async (rotiseria: Partial<Rotiseria>) => {
         try {
-            const { error } = await supabase.from('Rotiseria').update(rotiseria);
+            const { data, error } = await supabase.from('Rotiseria').update(rotiseria).eq('id', rotiseria.id);
 
             if (error) {
                 await Swal.fire('Error al actualizar la rotiseria', error.message, 'error');
