@@ -1,4 +1,4 @@
-'use client'
+
 import AsideBar from '@/components/dashboard/ui/AsideBar'
 import React, { useEffect } from 'react'
 

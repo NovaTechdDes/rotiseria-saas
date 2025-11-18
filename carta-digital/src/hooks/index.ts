@@ -13,7 +13,6 @@
     por ejemplo cuando agreguemos un producto vamos a tener forumaliros con inputs del tipo texto, numero, imagen, el use form los ayuda
     a manejar esto de una mejor forma.
 
-
     IMPORTANTE: Tanstackquery es una libreria que nos ayuda a no realizar tantas peticiones https a la base de datos, 
     ademas de manejar estados de las tablas
 

@@ -3,7 +3,6 @@ import React, { useEffect, useEffectEvent, useState } from 'react'
 import { ArrowLeft, ArrowLeftIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks';
-import { supabase } from '@/lib/supabase';
 
 const Login = () => {
     const router = useRouter();
