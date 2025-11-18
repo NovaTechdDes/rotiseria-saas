@@ -1,3 +1,5 @@
+/*Aca lo que modificamos son las barras de hacer scrollpara que se ven mas chicas*/
+
 ::-webkit-scrollbar {
     height: 6px;
     background: transparent;
