@@ -2,8 +2,28 @@ import { Egreso } from "@/interface";
 import { supabase } from "@/lib/supabase";
 import Swal from "sweetalert2";
 
+
+//Funcion principal que exporta las funciones individuales de cada metodo
+
+//Cuando veamos await Swal.fire() es un mensaje de alerta que se le muestra al usuario de que algo no anda bien
+
 export const egresoActions = () => {
 
+    /*
+        Esta funcion recibe dos parametros de fechas desde y hasta para luego hacer una consulta a la base de datos para obtener los 
+        egresos que esten entre esas dos fechas, como las fechas viene en tipo string lo que hacemos es transformarlas a tipo Date
+
+        Ademas el select trae todos los campos y los campos del tipoEgresoId asociado y lo renombramos como TipoEgreso
+
+        TipoEgreso es un objeto del tipo {
+            id: id perteneciente
+            nombre: un texto
+            created_at: Fecha de creacion
+            rotiseriaId: Id a la rotiseria que pertenece
+        }
+
+        Este Tipo de egreso es una tabla que esta asociado con una clave foreana
+    */
     const startGetEgresos = async (desde: string, hasta: string): Promise<Egreso[]> => {
 
         try {
@@ -25,6 +45,14 @@ export const egresoActions = () => {
             return [];
         };
     };
+
+
+    /*
+        Para crear un egreso obtenesmo el egreso por un parametro de la funcion. Luego lo que hacemos con supabase.auth.getUser() es 
+        obtener el usuario para agregarlo al egreso.usuarioId y saber que usuario creo ese egreso
+
+        Luego simplemente insertamos el egreso y si va todo bien retornamos true, sino un false
+    */
 
     const startPostEgreso = async (egreso: Egreso): Promise<boolean> => {
 
@@ -53,6 +81,12 @@ export const egresoActions = () => {
     };
 
 
+    /*
+        Para actaulizar el egreso lo que hacemos es obtener un egreso parcial por eso es :Partial<Egreso> y no :Egreso directamente
+        y lo modificamos en supabase comparando que el id sea igual al egreso.id en eq('id', egreso.id);
+
+        TAREA: Colocar el id del usuario que lo actualizo
+    */
     const startUpdateEgreso = async (egreso: Partial<Egreso>): Promise<boolean> => {
         try {
             const { error } = await supabase.from('Egreso').update(egreso).eq('id', egreso.id);
@@ -69,6 +103,11 @@ export const egresoActions = () => {
         };
     };
 
+
+    /*
+        Para eliminar un egreso necesitamos el id que nos biene como parametro del tipo number,
+        lo eliminamos comparando el id con eq('id', id), si todo va bien retornamos true, sino fals
+    */
     const startDeleteEgreso = async (id: number): Promise<boolean> => {
         try {
             const { error } = await supabase.from('Egreso').delete().eq('id', id);
