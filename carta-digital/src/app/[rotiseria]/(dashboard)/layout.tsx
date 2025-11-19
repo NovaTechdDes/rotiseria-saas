@@ -1,5 +1,5 @@
 'use client'
-import AsideBar from '@/components/dashboard/ui/AsideBar'
+import {AsideBar} from '@/components/dashboard/ui/AsideBar'
 import React, { useEffect } from 'react'
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
