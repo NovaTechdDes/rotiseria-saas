@@ -1,7 +1,7 @@
 'use client';
 import { X, Plus, Minus, Send } from 'lucide-react';
 import { useCarritoStore } from '@/store/useCarritoStore';
-import { Button } from '@/components/dashboard/ui/Button'; 
+import { Button } from '@/components/ui/Button'; 
 
 export const CartModal = () => {
   // 1. Conectamos con la "Comanda" (Store)
@@ -89,7 +89,7 @@ export const CartModal = () => {
                     fullWidth 
                     onClick={openModalClienteCarrito} // Esto abre el modal de datos del cliente
                 >
-                    Confirmar Pedido <Send size={18} />
+                    Continuar Pedido <Send size={18} />
                 </Button>
             </div>
         )}

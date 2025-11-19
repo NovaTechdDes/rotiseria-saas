@@ -8,6 +8,7 @@ import { useRotiseriaStore } from '@/store/useRotiseriaStore';
 import { useProductos, useCategorias } from '@/hooks';
 import { useCarritoStore } from '@/store/useCarritoStore';
 import { CartModal } from '@/components/cart/CartModal';
+import { ClientDataModal } from '@/components/cart/ClientDataModal';
 
 const RotiseriaPage = () => {
   // 1. Obtenemos la rotisería que cargó el Layout
@@ -93,6 +94,7 @@ const RotiseriaPage = () => {
 
       {/* Modales */}
       <CartModal />
+      <ClientDataModal />
     </div>
   );
 }
