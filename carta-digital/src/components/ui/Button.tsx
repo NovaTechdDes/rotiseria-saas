@@ -20,11 +20,11 @@ export const Button = ({
   
   // Diccionario de colores según la variante
   const variants = {
-    primary: "bg-orange-600 text-white hover:bg-orange-700 shadow-sm hover:shadow-md", // Naranja (Dashboard / Confirmar)
-    pink: "bg-pink-500 text-white hover:bg-pink-600 shadow-sm hover:shadow-md",         // Rosa (Carta Cliente)
-    secondary: "bg-gray-100 text-gray-800 hover:bg-gray-200",                            // Gris (Cancelar)
-    outline: "border-2 border-orange-500 text-orange-600 hover:bg-orange-50",            // Borde Naranja
-    danger: "bg-red-50 text-red-500 hover:bg-red-100 border border-red-200",             // Rojo (Eliminar)
+    primary: "cursor-pointer bg-orange-600 text-white hover:bg-orange-700 shadow-sm hover:shadow-md", // Naranja (Dashboard / Confirmar)
+    pink: "cursor-pointer bg-pink-500 text-white hover:bg-pink-600 shadow-sm hover:shadow-md",         // Rosa (Carta Cliente)
+    secondary: "cursor-pointer bg-gray-100 border border-gray-500 text-gray-800 hover:bg-gray-300 cursor-pointer",                            // Gris (Cancelar)
+    outline: "cursor-pointer border-2 border-orange-500 text-orange-600 hover:bg-orange-50",            // Borde Naranja
+    danger: "cursor-pointer bg-red-50 text-red-500 hover:bg-red-100 border border-red-200",             // Rojo (Eliminar)
   };
 
   return (
