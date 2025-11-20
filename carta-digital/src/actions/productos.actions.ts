@@ -1,8 +1,22 @@
+/*
+    En este arhcivo vamos a ejecutar las peticiones CRUD  a la base de datos de supabase
+
+    Cuando veamos Swal lo que haermos es mostrar un mensaje de error que surgio para informar al cliente
+*/
+
 import { Producto } from "@/interface";
 import { supabase } from "@/lib/supabase";
 import Swal from "sweetalert2";
 
 export const productsActions = () => {
+
+    /*
+        En la primera funcion vamos a obtener los productos de rotirias con el id que nos pasaron por parametro
+
+        lo que hacemos es buscar esos productos en la base de datos y traerlos con la categoria a la que pertenecen
+
+        Si existe algun error lo mostramos y devolvemos un array vacio
+    */
 
     const startGetProductosByRotiseriaId = async (id: number): Promise<Producto[] | []> => {
         try {
@@ -20,6 +34,14 @@ export const productsActions = () => {
         };
     };
 
+    /*
+        En la segunda funcion vamos a insertar un nuevo producto
+
+        lo que hacemos es insertar el producto en la base de datos y subir la imagen al storage de supabase
+
+        Si existe algun error lo mostramos y devolvemos false
+    */
+
     const startPostProducto = async (producto: Producto): Promise<boolean> => {
 
         try {
@@ -34,7 +56,8 @@ export const productsActions = () => {
                 const { data: publicURL } = await supabase.storage.from('productos').getPublicUrl(data.path);
                 imagen = publicURL.publicUrl;
             }
-            const { imagenFile, ...productoSinFile } = producto
+            const { imagenFile, ...productoSinFile } = producto;
+            
             const { error } = await supabase.from('Producto').insert({
                 ...productoSinFile,
                 imagen: imagen
@@ -44,7 +67,6 @@ export const productsActions = () => {
                 await Swal.fire('Error al crear el producto', error.message, 'error');
                 return false;
             };
-
             return true;
         } catch (error: any) {
             console.log(error);
@@ -53,6 +75,16 @@ export const productsActions = () => {
         }
 
     };
+
+    /*
+        En la tercera funcion vamos a actualizar un producto
+
+        lo que hacemos es actualizar el producto en la base de datos
+
+        Si existe algun error lo mostramos y devolvemos false
+
+        TAREA: Eliminar la imagen anterior si tiene y guardar la nueva si es que vino tambien
+    */
 
     const startUpdateProducto = async (producto: Partial<Producto>): Promise<boolean> => {
         try {
@@ -68,6 +100,17 @@ export const productsActions = () => {
             return false;
         }
     };
+
+
+    /*
+        En la cuarta funcion vamos a eliminar un producto
+
+        lo que hacemos es eliminar el producto de la base de datos
+
+        Si existe algun error lo mostramos y devolvemos false
+
+        Tarea: Preguntar a Juan si realmente tenemos que eliminar los productos
+    */
 
     const startDeleteProducto = async (id: number): Promise<boolean> => {
         try {

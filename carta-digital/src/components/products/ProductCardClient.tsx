@@ -12,7 +12,7 @@ interface ProductProps {
 
 export const ProductCardClient = ({ nombre, descripcion, precio, imagen, onAdd }: ProductProps) => {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
+    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
       
       {/* Contenedor Imagen y Precio */}
       <div className="relative h-48 w-full bg-gray-100">

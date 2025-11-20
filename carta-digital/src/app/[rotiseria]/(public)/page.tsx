@@ -9,6 +9,7 @@ import { useProductos, useCategorias } from '@/hooks';
 import { useCarritoStore } from '@/store/useCarritoStore';
 import { CartModal } from '@/components/cart/CartModal';
 import { ClientDataModal } from '@/components/cart/ClientDataModal';
+import { Producto } from '@/interface';
 
 const RotiseriaPage = () => {
   // 1. Obtenemos la rotisería que cargó el Layout
@@ -41,7 +42,7 @@ const RotiseriaPage = () => {
     : productos?.filter(p => p.Categoria?.nombre === categoriaActiva); 
 
 
-  const handleAgregar = (producto: any) => {
+  const handleAgregar = (producto: Producto) => {
      
      agregarAlCarrito({ producto, cantidad: 1 });
      

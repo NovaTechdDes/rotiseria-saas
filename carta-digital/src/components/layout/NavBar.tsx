@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { ShoppingCart, UserCog, Clock, Phone } from 'lucide-react'; 
 import { useCarritoStore } from '@/store/useCarritoStore';
+import Image from 'next/image';
 
 interface NavbarProps {
   nombre: string;
@@ -23,8 +24,8 @@ export const Navbar = ({ nombre, telefono, horario, logo }: NavbarProps) => {
           
           <div className="flex items-center gap-4 w-full sm:w-auto">
             
-            <div className="h-12 w-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center font-bold text-xl">
-                {nombre.charAt(0)}
+            <div>
+              <Image src={logo || '/logo.png'} className='rounded-lg' alt="Logo" width={50} height={50} />
             </div>
             
             <div>

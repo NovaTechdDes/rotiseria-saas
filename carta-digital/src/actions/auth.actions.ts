@@ -44,7 +44,7 @@ export const getUsuarios = async (rotiseriaId: number) => {
     }
 };
 
-export const startPostUsuario = async (usuario: Usuario): Promise<Boolean> => {
+export const startPostUsuario = async (usuario: Usuario): Promise<boolean> => {
 
     try {
         const { error } = await supabase.from('Usuario').insert(usuario);
