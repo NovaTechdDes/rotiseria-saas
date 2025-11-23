@@ -1,5 +1,5 @@
 export interface TipoPago {
-    tipo: string;
-    importe: number;
-    cant: number
+  tipo: string;
+  importe: number;
+  cant: number;
 }

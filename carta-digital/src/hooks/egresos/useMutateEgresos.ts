@@ -1,5 +1,5 @@
-import { egresoActions } from "@/actions";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { egresoActions } from '@/actions';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /*
     Use Mutate Egresos es una funcion que engloba las 3 funciones principales para modificar datos en la base de datos
@@ -11,37 +11,37 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
     modficarEgresoMutation y eliminarEgresoMutation hacen lo mismo solo que llaman a otras funciones
 */
 
-
 export const useMutateEgresos = () => {
-    const { startPostEgreso, startUpdateEgreso, startDeleteEgreso } = egresoActions();
+  const { startPostEgreso, startUpdateEgreso, startDeleteEgreso } =
+    egresoActions();
 
-    //Necesitamos traer el useQueryClient que engloba a toda la aplicacion
-    const queryClient = useQueryClient();
+  //Necesitamos traer el useQueryClient que engloba a toda la aplicacion
+  const queryClient = useQueryClient();
 
-    const agregarEgresoMutation = useMutation({
-        mutationFn: startPostEgreso,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['egresos'] });
-        }
-    });
+  const agregarEgresoMutation = useMutation({
+    mutationFn: startPostEgreso,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['egresos'] });
+    },
+  });
 
-    const modificarEgresoMutation = useMutation({
-        mutationFn: startUpdateEgreso,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['egresos'] });
-        }
-    });
+  const modificarEgresoMutation = useMutation({
+    mutationFn: startUpdateEgreso,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['egresos'] });
+    },
+  });
 
-    const eliminarEgresoMutation = useMutation({
-        mutationFn: startDeleteEgreso,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['egresos'] });
-        }
-    });
+  const eliminarEgresoMutation = useMutation({
+    mutationFn: startDeleteEgreso,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['egresos'] });
+    },
+  });
 
-    return {
-        agregarEgreso: agregarEgresoMutation,
-        modificarEgreso: modificarEgresoMutation,
-        eliminarEgreso: eliminarEgresoMutation
-    };
+  return {
+    agregarEgreso: agregarEgresoMutation,
+    modificarEgreso: modificarEgresoMutation,
+    eliminarEgreso: eliminarEgresoMutation,
+  };
 };

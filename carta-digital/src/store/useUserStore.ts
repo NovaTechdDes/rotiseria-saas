@@ -1,26 +1,26 @@
-import { Usuario } from "@/interface";
-import { create } from "zustand";
+import { Usuario } from '@/interface';
+import { create } from 'zustand';
 
 interface UserStore {
+  usuarioSeleccionado: Usuario | null;
 
-    usuarioSeleccionado: Usuario | null;
-
-    modalAbierto: boolean;
-    openModal: (usuario?: Usuario) => void;
-    cerrarModal: () => void;
-};
-
+  modalAbierto: boolean;
+  openModal: (usuario?: Usuario) => void;
+  cerrarModal: () => void;
+}
 
 export const useUsuarioStore = create<UserStore>((set) => ({
-    usuarioSeleccionado: null,
+  usuarioSeleccionado: null,
 
-    modalAbierto: false,
-    openModal: (usuario) => set({
-        usuarioSeleccionado: usuario,
-        modalAbierto: true
+  modalAbierto: false,
+  openModal: (usuario) =>
+    set({
+      usuarioSeleccionado: usuario,
+      modalAbierto: true,
     }),
-    cerrarModal: () => set({
-        usuarioSeleccionado: null,
-        modalAbierto: false
-    })
-}))
+  cerrarModal: () =>
+    set({
+      usuarioSeleccionado: null,
+      modalAbierto: false,
+    }),
+}));

@@ -1,12 +1,12 @@
-import { categoriasActions } from "@/actions";
-import { useQuery } from "@tanstack/react-query"
+import { categoriasActions } from '@/actions';
+import { useQuery } from '@tanstack/react-query';
 
 const { startGetCategoriasByRotiseriaId } = categoriasActions();
 
 export const useCategorias = (id: number) => {
-    return useQuery({
-        queryKey: ['categorias', id],
-        queryFn: () => startGetCategoriasByRotiseriaId(id),
-        staleTime: 1000 * 60 * 60
-    });
+  return useQuery({
+    queryKey: ['categorias', id],
+    queryFn: () => startGetCategoriasByRotiseriaId(id),
+    staleTime: 1000 * 60 * 60,
+  });
 };

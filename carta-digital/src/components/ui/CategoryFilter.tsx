@@ -6,7 +6,11 @@ interface CategoryFilterProps {
   setCategoriaActiva: (cat: string) => void;
 }
 
-export const CategoryFilter = ({ categorias, categoriaActiva, setCategoriaActiva }: CategoryFilterProps) => {
+export const CategoryFilter = ({
+  categorias,
+  categoriaActiva,
+  setCategoriaActiva,
+}: CategoryFilterProps) => {
   return (
     <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide py-4">
       {/* Botón "Todos" */}
@@ -26,7 +30,7 @@ export const CategoryFilter = ({ categorias, categoriaActiva, setCategoriaActiva
         <button
           key={cat}
           onClick={() => setCategoriaActiva(cat)}
-          className={`px-6 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
+          className={`px-6 py-2 capitalize rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
             categoriaActiva === cat
               ? 'bg-orange-500 text-white shadow-md'
               : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
