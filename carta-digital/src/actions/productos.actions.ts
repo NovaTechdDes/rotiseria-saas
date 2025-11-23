@@ -87,7 +87,6 @@ export const productsActions = () => {
     try {
       const { Categoria, imagenFile, ...productoSinCategoria } = producto;
       console.log(imagenFile);
-      return false;
 
       const { error } = await supabase.from('Producto').update(productoSinCategoria).eq('id', producto.id);
       if (error) {
