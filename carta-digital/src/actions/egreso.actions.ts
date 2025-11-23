@@ -91,31 +91,18 @@ export const egresoActions = () => {
 
         TAREA: Colocar el id del usuario que lo actualizo
     */
-  const startUpdateEgreso = async (
-    egreso: Partial<Egreso>
-  ): Promise<boolean> => {
+  const startUpdateEgreso = async (egreso: Partial<Egreso>): Promise<boolean> => {
     try {
-      const { error } = await supabase
-        .from('Egreso')
-        .update(egreso)
-        .eq('id', egreso.id);
+      const { error } = await supabase.from('Egreso').update(egreso).eq('id', egreso.id);
       if (error) {
-        await Swal.fire(
-          'Error al actualizar el egreso',
-          error.message,
-          'error'
-        );
+        await Swal.fire('Error al actualizar el egreso', error.message, 'error');
         return false;
       }
 
       return true;
     } catch (error: any) {
       console.log(error);
-      await Swal.fire(
-        'Error inesperado al actualizar el egreso',
-        error.message,
-        'error'
-      );
+      await Swal.fire('Error inesperado al actualizar el egreso', error.message, 'error');
       return false;
     }
   };

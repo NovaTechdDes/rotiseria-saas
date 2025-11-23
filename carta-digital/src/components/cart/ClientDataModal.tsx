@@ -11,21 +11,17 @@ import { Button } from '@/components/ui/Button';
 
 export const ClientDataModal = () => {
   // 1. Stores y Hooks
-  const {
-    modalClienteCarrito,
-    closeModalClienteCarrito,
-    productos,
-    total,
-    resetCarrito,
-  } = useCarritoStore();
+  const { modalClienteCarrito, closeModalClienteCarrito, productos, total, resetCarrito } = useCarritoStore();
   const { rotiseriaActive } = useRotiseriaStore();
   const { agregarPedido } = useMutatePedidos(); // El hook que guarda en la base de datos
+
+  const { isPending, mutateAsync: agregar } = agregarPedido;
 
   // 2. Estado del Formulario
   const [formData, setFormData] = useState({
     nombre: '',
     telefono: '',
-    tipoPago: 'Efectivo',
+    tipoPago: 'efectivo',
     observaciones: '',
     direccion: '', // Opcional si es delivery
     envio: false,
@@ -35,11 +31,7 @@ export const ClientDataModal = () => {
   if (!modalClienteCarrito) return null;
 
   // 3. Manejo de inputs
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -70,20 +62,13 @@ export const ClientDataModal = () => {
     };
 
     // Ejecutamos la mutación (Guardar en Base de Datos)
-    agregarPedido.mutate(nuevoPedido, {
-      onSuccess: () => {
-        closeModalClienteCarrito(); // Cerramos modal
-        resetCarrito(); // Vaciamos carrito
-        Swal.fire(
-          '¡Pedido Enviado!',
-          'Tu pedido ha sido recibido correctamente.',
-          'success'
-        );
-      },
-      onError: () => {
-        Swal.fire('Error', 'Hubo un problema al enviar el pedido.', 'error');
-      },
-    });
+    const ok = await agregar(nuevoPedido);
+    agregarPedido.mutate(nuevoPedido);
+    if (ok) {
+      closeModalClienteCarrito(); // Cerramos modal
+      resetCarrito(); // Vaciamos carrito
+      Swal.fire('¡Pedido Enviado!', 'Tu pedido ha sido recibido correctamente.', 'success');
+    }
   };
 
   return (
@@ -92,10 +77,7 @@ export const ClientDataModal = () => {
         {/* Header */}
         <div className="bg-orange-600 p-4 flex justify-between items-center text-white">
           <h2 className="text-lg font-bold">Completa tus datos</h2>
-          <button
-            onClick={closeModalClienteCarrito}
-            className="text-white/80 hover:text-white"
-          >
+          <button onClick={closeModalClienteCarrito} className="text-white/80 hover:text-white">
             <X size={24} />
           </button>
         </div>
@@ -104,9 +86,7 @@ export const ClientDataModal = () => {
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* Nombre */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nombre *
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
             <input
               type="text"
               name="nombre"
@@ -120,9 +100,7 @@ export const ClientDataModal = () => {
 
           {/* Teléfono */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Teléfono (WhatsApp) *
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono (WhatsApp) *</label>
             <input
               type="tel"
               name="telefono"
@@ -136,26 +114,22 @@ export const ClientDataModal = () => {
 
           {/* Forma de Pago */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Forma de Pago
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Forma de Pago</label>
             <select
               name="tipoPago"
               value={formData.tipoPago}
               onChange={handleChange}
               className="text-black placeholder-gray-300 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none bg-white"
             >
-              <option value="Efectivo">Efectivo</option>
-              <option value="Mercado Pago">Mercado Pago / Transferencia</option>
-              <option value="Tarjeta">Tarjeta de Débito/Crédito</option>
+              <option value="efectivo">Efectivo</option>
+              <option value="transferencia">Mercado Pago / Transferencia</option>
+              <option value="tarjeta">Tarjeta de Débito/Crédito</option>
             </select>
           </div>
 
           {/* Observaciones */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Observaciones
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Observaciones</label>
             <textarea
               name="observaciones"
               value={formData.observaciones}
@@ -167,20 +141,10 @@ export const ClientDataModal = () => {
           </div>
 
           <div className="pt-4 flex gap-3">
-            <Button
-              type="button"
-              variant="secondary"
-              fullWidth
-              onClick={closeModalClienteCarrito}
-            >
+            <Button type="button" variant="secondary" fullWidth onClick={closeModalClienteCarrito}>
               Cancelar
             </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              fullWidth
-              disabled={agregarPedido.isPending}
-            >
+            <Button type="submit" variant="primary" fullWidth disabled={agregarPedido.isPending}>
               {agregarPedido.isPending ? (
                 <span className="flex items-center gap-2">
                   <Loader2 className="animate-spin" /> Enviando...

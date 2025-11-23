@@ -1,5 +1,4 @@
 import { ListaProductos } from '@/store';
-import { Producto } from './Producto';
 import { MovProducto } from './MovProducto';
 
 export interface Pedido {
@@ -14,7 +13,6 @@ export interface Pedido {
   estado: string;
   observaciones: string;
   tipoPago: string;
-  usuarioId: number;
   rotiseriaId: number;
   productos?: ListaProductos[];
   movProductos?: MovProducto[];

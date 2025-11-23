@@ -6,11 +6,13 @@ type PedidosFromBackend = {
   cliente: string;
   telefono: string;
   direccion: string;
-  envio: boolean;
+  envio: string;
   vuelto: number;
   total: number;
   estado: string;
-  usuarioId: number;
+  observaciones: string;
+  tipoPago: string;
+  mostrar: boolean;
   rotiseriaId: number;
 };
 
@@ -26,7 +28,9 @@ export function mapPedidoFromBackend(data: PedidosFromBackend): Pedido {
     vuelto: data.vuelto,
     total: data.total,
     estado: data.estado,
-    usuarioId: data.usuarioId,
+    observaciones: data.observaciones,
+    tipoPago: data.tipoPago,
+    mostrar: data.mostrar,
     rotiseriaId: data.rotiseriaId,
   };
 }

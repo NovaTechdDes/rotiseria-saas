@@ -2,15 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  LayoutDashboard,
-  ShoppingBag,
-  Package,
-  FolderOpen,
-  LogOut,
-  ArrowLeft,
-  Store,
-} from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Package, FolderOpen, LogOut, Store } from 'lucide-react';
 
 // Importamos los hooks necesarios
 import { useAuth } from '@/hooks';
@@ -48,9 +40,7 @@ export default function AsideBar() {
       <div className="p-6 border-b border-gray-100">
         <div className="flex items-center gap-3 text-orange-600 mb-1">
           <LayoutDashboard size={28} strokeWidth={2.5} />
-          <span className="text-xl font-bold tracking-tight text-gray-800">
-            Dashboard
-          </span>
+          <span className="text-xl font-bold tracking-tight text-gray-800">Dashboard</span>
         </div>
         <p className="text-xs text-gray-400 pl-10">Gestión de tu local</p>
       </div>
@@ -72,10 +62,7 @@ export default function AsideBar() {
               }`}
             >
               {/* El icono cambia de color o grosor si está activo */}
-              <item.icon
-                size={20}
-                className={`transition-colors ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-orange-500'}`}
-              />
+              <item.icon size={20} className={`transition-colors ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-orange-500'}`} />
               {item.name}
             </Link>
           );
@@ -97,7 +84,7 @@ export default function AsideBar() {
           {/* Botón de Cerrar Sesión */}
           <button
             onClick={logOut}
-            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+            className="w-full cursor-pointer hover:opacity-80 flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
           >
             <LogOut size={18} />
             Cerrar Sesión
@@ -106,9 +93,7 @@ export default function AsideBar() {
 
         {/* Info del usuario */}
         <div className="mt-4 text-center">
-          <p className="text-[10px] text-gray-400 uppercase tracking-widest">
-            {rotiseriaActive?.nombre || 'Panel Admin'}
-          </p>
+          <p className="text-[10px] text-gray-400 uppercase tracking-widest">{rotiseriaActive?.nombre || 'Panel Admin'}</p>
         </div>
       </div>
     </aside>

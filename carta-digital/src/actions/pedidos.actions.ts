@@ -56,27 +56,10 @@ export const pedidosActions = () => {
         Si da un error lo mostramos y devolvemos false
 
         Si existe algun error lo mostramos y devolvemos false
-
-
-        TAREA: Probar a insertar un pedido sin loguear que creo que lo hice mal, no necesita de un usuario porque sino cualquier cliente no podria instertar un pedido
-    */
+  */
 
   const startPostPedido = async (pedido: Pedido): Promise<boolean> => {
     try {
-      const { data: dataUser, error: errorUser } =
-        await supabase.auth.getUser();
-
-      if (errorUser) {
-        console.log(errorUser);
-        await Swal.fire(
-          'Error al obtener el usuario',
-          errorUser?.message,
-          'error'
-        );
-        return false;
-      }
-
-      const usuario = dataUser.user.id;
       const productosPlanos = pedido.productos?.map((item) => ({
         cantidad: item.cantidad,
         precioUnitario: item.producto.precio,
@@ -85,6 +68,7 @@ export const pedidosActions = () => {
         rotiseriaId: item.producto.rotiseriaId,
       }));
 
+      
       const { error } = await supabase.rpc('create_ventas_con_productos', {
         p_cliente: pedido.cliente,
         p_total: pedido.total,
@@ -95,7 +79,6 @@ export const pedidosActions = () => {
         p_vuelto: pedido.vuelto,
         p_observaciones: pedido.observaciones,
         p_tipopago: pedido.tipoPago,
-        p_usuarioid: usuario,
         p_rotiseriaid: pedido.rotiseriaId,
         p_productos: productosPlanos,
       });
