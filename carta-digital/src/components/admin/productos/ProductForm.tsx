@@ -3,6 +3,8 @@ import { useForm } from '@/hooks/useForm';
 import { Producto } from '@/interface';
 import { useCategorias } from '@/hooks/categorias/useCategorias';
 import Swal from 'sweetalert2';
+import { useMutateProductos } from '@/hooks';
+import { useRotiseriaStore } from '@/store';
 
 interface Props {
   rotiseriaId: number;
@@ -22,15 +24,23 @@ const initialProduct: Producto = {
   imagen: '',
 };
 
-export const ProductForm = ({ rotiseriaId, productToEdit, onClose, onSubmit }: Props) => {
-  const { data: categorias, isLoading } = useCategorias(rotiseriaId);
+export const ProductForm = ({ productToEdit, onClose }: Props) => {
+  //Esto nos trae la rotiseria activa por la url devolviendo uin id
+  const { rotiseriaActive } = useRotiseriaStore();
 
-  const { formState, onInputChange, onResetForm, nombre, descripcion, precio, categoriaId, activo, imagenFile } = useForm(productToEdit || { ...initialProduct, rotiseriaId });
+  //Mutate sirrver para traer las funciones de agregar, modificar y elimina. Si haces Ctrl + espacio adentro de los corchetes te aparecen las otras funciones
+  const { agregarProducto } = useMutateProductos();
+  const { data: categorias, isLoading } = useCategorias(rotiseriaActive?.id ?? 0);
 
+  //Mutate que lo renombreamos para agregar y el ispending, en modificar y eliminar producto tambien nos viene un mutateAsync
+  const { mutateAsync: agregar, isPending } = agregarProducto;
+
+  const { formState, onInputChange, onResetForm, nombre, descripcion, rotiseriaId, precio, categoriaId, activo, imagenFile } = useForm(productToEdit ?? initialProduct);
+
+  //Cada vez que el id de la rotiseria cambia, se actualiza el formState
   useEffect(() => {
-    if (productToEdit) {
-    }
-  }, [productToEdit]);
+      onInputChange({target: {name: 'rotiseriaId', value: rotiseriaActive?.id ?? 0}});
+  }, [rotiseriaActive]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,11 +49,11 @@ export const ProductForm = ({ rotiseriaId, productToEdit, onClose, onSubmit }: P
     if (precio <= 0) return Swal.fire('Error', 'El precio debe ser mayor a 0', 'error');
     if (categoriaId === 0) return Swal.fire('Error', 'Debe seleccionar una categoria', 'error');
 
-    const success = await onSubmit(formState as Producto);
+    const success = await agregar(formState);
     if (success) {
       onClose();
       onResetForm();
-    }
+    };
   };
 
   if (isLoading) return <p>Cargando categorias...</p>;
@@ -97,15 +107,15 @@ export const ProductForm = ({ rotiseriaId, productToEdit, onClose, onSubmit }: P
           </div>
 
           <div className="flex justify-end space-x-2 mt-6">
-            <button type="button" onClick={onClose} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+            <button type="button" onClick={onClose} className="bg-gray-300 cursor-pointer hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
               Cancelar
             </button>
             {productToEdit ? (
-              <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <button type="submit" className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Modificar
               </button>
             ) : (
-              <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <button type="submit" className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Guardar
               </button>
             )}
