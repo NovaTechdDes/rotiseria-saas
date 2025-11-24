@@ -4,7 +4,10 @@ import { Producto } from '@/interface';
 import { useCategorias } from '@/hooks/categorias/useCategorias';
 import Swal from 'sweetalert2';
 import { useMutateProductos } from '@/hooks';
+<<<<<<< HEAD
 import { useRotiseriaStore } from '@/store';
+=======
+>>>>>>> 4664e0edd846e8652642daf90d443d2183645c6b
 
 interface Props {
   rotiseriaId: number;
@@ -24,13 +27,11 @@ const initialProduct: Producto = {
   imagen: '',
 };
 
-export const ProductForm = ({ productToEdit, onClose }: Props) => {
-  //Esto nos trae la rotiseria activa por la url devolviendo uin id
-  const { rotiseriaActive } = useRotiseriaStore();
-
-  //Mutate sirrver para traer las funciones de agregar, modificar y elimina. Si haces Ctrl + espacio adentro de los corchetes te aparecen las otras funciones
-  const { agregarProducto } = useMutateProductos();
-  const { data: categorias, isLoading } = useCategorias(rotiseriaActive?.id ?? 0);
+export const ProductForm = ({ rotiseriaId, productToEdit, onClose, onSubmit }: Props) => {
+  const { data: categorias, isLoading } = useCategorias(rotiseriaId);
+  const { modificarProducto } = useMutateProductos();
+  const { mutateAsync: modificarProductoAsync, isPending: modificarProductoPending } = modificarProducto;
+  const { formState, onInputChange, onResetForm, nombre, descripcion, precio, categoriaId, activo, imagenFile } = useForm(productToEdit || { ...initialProduct, rotiseriaId });
 
   //Mutate que lo renombreamos para agregar y el ispending, en modificar y eliminar producto tambien nos viene un mutateAsync
   const { mutateAsync: agregar, isPending } = agregarProducto;
@@ -49,11 +50,19 @@ export const ProductForm = ({ productToEdit, onClose }: Props) => {
     if (precio <= 0) return Swal.fire('Error', 'El precio debe ser mayor a 0', 'error');
     if (categoriaId === 0) return Swal.fire('Error', 'Debe seleccionar una categoria', 'error');
 
-    const success = await agregar(formState);
-    if (success) {
-      onClose();
-      onResetForm();
-    };
+    if (productToEdit) {
+      const ok = await modificarProductoAsync(formState);
+      if (ok) {
+        onClose();
+        onResetForm();
+      }
+    } else {
+      const success = await onSubmit(formState as Producto);
+      if (success) {
+        onClose();
+        onResetForm();
+      }
+    }
   };
 
   if (isLoading) return <p>Cargando categorias...</p>;
@@ -111,8 +120,8 @@ export const ProductForm = ({ productToEdit, onClose }: Props) => {
               Cancelar
             </button>
             {productToEdit ? (
-              <button type="submit" className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Modificar
+              <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" disabled={modificarProductoPending}>
+                {modificarProductoPending ? 'Modificando' : 'Modificar'}
               </button>
             ) : (
               <button type="submit" className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

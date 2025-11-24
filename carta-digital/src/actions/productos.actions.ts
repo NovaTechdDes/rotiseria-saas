@@ -80,17 +80,42 @@ export const productsActions = () => {
 
         Si existe algun error lo mostramos y devolvemos false
 
-        TAREA: Eliminar la imagen anterior si tiene y guardar la nueva si es que vino tambien
     */
 
   const startUpdateProducto = async (producto: Partial<Producto>): Promise<boolean> => {
     try {
       const { Categoria, imagenFile, ...productoSinCategoria } = producto;
-      console.log(imagenFile);
+      let imagenNueva = '';
+      //Eliminaos la iomagen anterior
+      if (imagenFile) {
+        if (productoSinCategoria.imagen) {
+          const oldPath = productoSinCategoria.imagen.split('/productos/')[1];
+          await supabase.storage.from('productos').remove([oldPath]);
+        }
 
-      const { error } = await supabase.from('Producto').update(productoSinCategoria).eq('id', producto.id);
+        //Creamos nueva imagen
+
+        if (producto.imagenFile) {
+          const { data, error: errorPostImage } = await supabase.storage.from('productos').upload(`${Date.now()}-${producto?.imagenFile.name}`, producto.imagenFile);
+          if (errorPostImage) {
+            await Swal.fire('Error al subir imagen', errorPostImage.message, 'error');
+            return false;
+          }
+
+          const { data: publicURL } = await supabase.storage.from('productos').getPublicUrl(data.path);
+          imagenNueva = publicURL.publicUrl;
+        }
+      }
+
+      const { error } = await supabase
+        .from('Producto')
+        .update({
+          ...productoSinCategoria,
+          imagen: imagenNueva ?? productoSinCategoria.imagen,
+        })
+        .eq('id', producto.id);
       if (error) {
-        await Swal.fire('Error al actualizar el producto', error.message, 'error');
+        await Swal.fire('Error al actualizar el producto', error?.message, 'error');
         return false;
       }
       return true;
