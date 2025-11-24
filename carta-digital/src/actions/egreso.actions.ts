@@ -22,16 +22,9 @@ export const egresoActions = () => {
 
         Este Tipo de egreso es una tabla que esta asociado con una clave foreana
     */
-  const startGetEgresos = async (
-    desde: string,
-    hasta: string
-  ): Promise<Egreso[]> => {
+  const startGetEgresos = async (desde: string, hasta: string): Promise<Egreso[]> => {
     try {
-      const { data, error } = await supabase
-        .from('Egreso')
-        .select('*, TipoEgreso:tipoEgresoId(*)')
-        .gte('created_at', `${desde}T00:00:00+00:00`)
-        .lte('created_at', `${hasta}T23:59:59+00:00`);
+      const { data, error } = await supabase.from('Egreso').select('*, TipoEgreso:tipoEgresoId(*)').gte('created_at', `${desde}T00:00:00+00:00`).lte('created_at', `${hasta}T23:59:59+00:00`);
 
       if (error) {
         await Swal.fire('Error al obtener los egreso', error.message, 'error');
@@ -40,11 +33,7 @@ export const egresoActions = () => {
 
       return data;
     } catch (error: any) {
-      await Swal.fire(
-        'Error inserperado al obtener los egreos',
-        error.message,
-        'error'
-      );
+      await Swal.fire('Error inserperado al obtener los egreos', error.message, 'error');
       return [];
     }
   };
@@ -60,11 +49,7 @@ export const egresoActions = () => {
     const { data: user, error: errorUser } = await supabase.auth.getUser();
 
     if (errorUser) {
-      await Swal.fire(
-        'Error al obtener el usuario',
-        errorUser.message,
-        'error'
-      );
+      await Swal.fire('Error al obtener el usuario', errorUser.message, 'error');
       return false;
     }
 
@@ -121,11 +106,7 @@ export const egresoActions = () => {
       }
       return true;
     } catch (error: any) {
-      await Swal.fire(
-        'Error inesperado al eliminar el egreso',
-        error.message,
-        'error'
-      );
+      await Swal.fire('Error inesperado al eliminar el egreso', error.message, 'error');
       return false;
     }
   };

@@ -50,7 +50,7 @@ export const CategoryList = ({ categories, onEdit }: Props) => {
               <Folder size={24} />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-bold text-gray-800">
+              <h3 className="text-lg font-bold text-gray-800 capitalize">
                 {categoria.nombre}
               </h3>
               {/* Placeholder for product count if available in the future */}

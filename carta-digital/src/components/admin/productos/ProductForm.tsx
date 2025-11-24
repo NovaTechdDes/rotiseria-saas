@@ -4,10 +4,7 @@ import { Producto } from '@/interface';
 import { useCategorias } from '@/hooks/categorias/useCategorias';
 import Swal from 'sweetalert2';
 import { useMutateProductos } from '@/hooks';
-<<<<<<< HEAD
 import { useRotiseriaStore } from '@/store';
-=======
->>>>>>> 4664e0edd846e8652642daf90d443d2183645c6b
 
 interface Props {
   rotiseriaId: number;
@@ -27,14 +24,11 @@ const initialProduct: Producto = {
   imagen: '',
 };
 
-export const ProductForm = ({ rotiseriaId, productToEdit, onClose, onSubmit }: Props) => {
-  const { data: categorias, isLoading } = useCategorias(rotiseriaId);
+export const ProductForm = ({ productToEdit, onClose, onSubmit }: Props) => {
+  const { rotiseriaActive } = useRotiseriaStore();
+  const { data: categorias, isLoading } = useCategorias(rotiseriaActive?.id ?? 0);
   const { modificarProducto } = useMutateProductos();
   const { mutateAsync: modificarProductoAsync, isPending: modificarProductoPending } = modificarProducto;
-  const { formState, onInputChange, onResetForm, nombre, descripcion, precio, categoriaId, activo, imagenFile } = useForm(productToEdit || { ...initialProduct, rotiseriaId });
-
-  //Mutate que lo renombreamos para agregar y el ispending, en modificar y eliminar producto tambien nos viene un mutateAsync
-  const { mutateAsync: agregar, isPending } = agregarProducto;
 
   const { formState, onInputChange, onResetForm, nombre, descripcion, rotiseriaId, precio, categoriaId, activo, imagenFile } = useForm(productToEdit ?? initialProduct);
 

@@ -54,8 +54,8 @@ export const ProductItem = ({ producto, onEdit }: Props) => {
         <p className="text-gray-500 text-sm mb-4 line-clamp-2 flex-1">{producto.descripcion}</p>
 
         <div className="flex justify-between items-center mb-4">
-          <span className="text-orange-500 text-sm font-medium">{producto.Categoria?.nombre || 'Sin categoría'}</span>
-          <span className="text-xl font-bold text-gray-900">${producto.precio}</span>
+          <span className="text-orange-500 text-sm font-semibold capitalize">{producto.Categoria?.nombre || 'Sin categoría'}</span>
+          <span className="text-xl font-bold text-gray-900">${producto.precio.toFixed(2)}</span>
         </div>
 
         {/* Actions */}
