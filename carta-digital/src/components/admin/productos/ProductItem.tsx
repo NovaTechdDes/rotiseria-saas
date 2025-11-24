@@ -35,7 +35,7 @@ export const ProductItem = ({ producto, onEdit }: Props) => {
       {/* Image Section */}
       <div className="h-48 w-full bg-gray-200 relative">
         {producto.imagen ? (
-          <Image width={100} height={100} src={producto.imagen} alt={producto.nombre} className="w-full h-full object-cover" />
+          <Image priority width={100} height={100} src={producto.imagen} alt={producto.nombre} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-400">
             <ImageIcon size={48} />

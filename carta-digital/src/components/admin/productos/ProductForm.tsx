@@ -3,6 +3,7 @@ import { useForm } from '@/hooks/useForm';
 import { Producto } from '@/interface';
 import { useCategorias } from '@/hooks/categorias/useCategorias';
 import Swal from 'sweetalert2';
+import { useMutateProductos } from '@/hooks';
 
 interface Props {
   rotiseriaId: number;
@@ -24,7 +25,8 @@ const initialProduct: Producto = {
 
 export const ProductForm = ({ rotiseriaId, productToEdit, onClose, onSubmit }: Props) => {
   const { data: categorias, isLoading } = useCategorias(rotiseriaId);
-
+  const { modificarProducto } = useMutateProductos();
+  const { mutateAsync: modificarProductoAsync, isPending: modificarProductoPending } = modificarProducto;
   const { formState, onInputChange, onResetForm, nombre, descripcion, precio, categoriaId, activo, imagenFile } = useForm(productToEdit || { ...initialProduct, rotiseriaId });
 
   useEffect(() => {
@@ -39,10 +41,18 @@ export const ProductForm = ({ rotiseriaId, productToEdit, onClose, onSubmit }: P
     if (precio <= 0) return Swal.fire('Error', 'El precio debe ser mayor a 0', 'error');
     if (categoriaId === 0) return Swal.fire('Error', 'Debe seleccionar una categoria', 'error');
 
-    const success = await onSubmit(formState as Producto);
-    if (success) {
-      onClose();
-      onResetForm();
+    if (productToEdit) {
+      const ok = await modificarProductoAsync(formState);
+      if (ok) {
+        onClose();
+        onResetForm();
+      }
+    } else {
+      const success = await onSubmit(formState as Producto);
+      if (success) {
+        onClose();
+        onResetForm();
+      }
     }
   };
 
@@ -101,8 +111,8 @@ export const ProductForm = ({ rotiseriaId, productToEdit, onClose, onSubmit }: P
               Cancelar
             </button>
             {productToEdit ? (
-              <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Modificar
+              <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" disabled={modificarProductoPending}>
+                {modificarProductoPending ? 'Modificando' : 'Modificar'}
               </button>
             ) : (
               <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
