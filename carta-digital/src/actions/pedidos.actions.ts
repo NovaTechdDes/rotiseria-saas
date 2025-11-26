@@ -22,12 +22,7 @@ export const pedidosActions = () => {
 
   const startGetPedidos = async (id: number): Promise<Pedido[] | []> => {
     try {
-      const { data, error } = await supabase
-        .from('Pedido')
-        .select('*, movProductos:MovProducto(*)')
-        .eq('rotiseriaId', id)
-        .eq('mostrar', true)
-        .order('created_at', { ascending: false });
+      const { data, error } = await supabase.from('Pedido').select('*, movProductos:MovProducto(*)').eq('rotiseriaId', id).eq('mostrar', true).order('created_at', { ascending: false });
 
       if (error) {
         await Swal.fire('Error al obtener los pedidos', error.message, 'error');
@@ -37,11 +32,7 @@ export const pedidosActions = () => {
       return data;
     } catch (error: any) {
       console.log(error);
-      await Swal.fire(
-        'Error inesperado al obtener los pedidos',
-        error.message,
-        'error'
-      );
+      await Swal.fire('Error inesperado al obtener los pedidos', error.message, 'error');
       return [];
     }
   };
@@ -68,7 +59,6 @@ export const pedidosActions = () => {
         rotiseriaId: item.producto.rotiseriaId,
       }));
 
-      
       const { error } = await supabase.rpc('create_ventas_con_productos', {
         p_cliente: pedido.cliente,
         p_total: pedido.total,
@@ -91,11 +81,7 @@ export const pedidosActions = () => {
 
       return true;
     } catch (error: any) {
-      await Swal.fire(
-        'Error inesperado al crear un pedido',
-        error.message,
-        'error'
-      );
+      await Swal.fire('Error inesperado al crear un pedido', error.message, 'error');
       return false;
     }
   };
@@ -106,33 +92,21 @@ export const pedidosActions = () => {
         Si existe algun error lo mostramos y devolvemos false y sino devolvemos true
     */
 
-  const startUpdatePedido = async (
-    pedido: Partial<Pedido>
-  ): Promise<boolean> => {
+  const startUpdatePedido = async (pedido: Partial<Pedido>): Promise<boolean> => {
     try {
       const { movProductos, ...pedidoSinMov } = pedido;
-      console.log(movProductos);
-      const { error } = await supabase
-        .from('Pedido')
-        .update(pedidoSinMov)
-        .eq('id', pedido.id);
+
+      const { error, data } = await supabase.from('Pedido').update(pedidoSinMov).eq('id', pedido.id);
+      console.log({ error, data });
 
       if (error) {
-        await Swal.fire(
-          'Error al actualizar el pedido',
-          error.message,
-          'error'
-        );
+        await Swal.fire('Error al actualizar el pedido', error.message, 'error');
         return false;
       }
       return true;
     } catch (error: any) {
       console.log(error);
-      await Swal.fire(
-        'Error inesperado al actualizar pedido',
-        error.message,
-        'error'
-      );
+      await Swal.fire('Error inesperado al actualizar pedido', error.message, 'error');
       return false;
     }
   };
@@ -146,27 +120,16 @@ export const pedidosActions = () => {
 
   const startDeletePedido = async (id: number): Promise<boolean> => {
     try {
-      const { error } = await supabase
-        .from('Pedido')
-        .update({ mostrar: false })
-        .eq('id', id);
+      const { error } = await supabase.from('Pedido').update({ mostrar: false }).eq('id', id);
 
       if (error) {
-        await Swal.fire(
-          'Error al eliminar el porducto',
-          error.message,
-          'error'
-        );
+        await Swal.fire('Error al eliminar el porducto', error.message, 'error');
         return false;
       }
       return true;
     } catch (error: any) {
       console.log(error);
-      await Swal.fire(
-        'Error inesperado al eliminar producto',
-        error.message,
-        'error'
-      );
+      await Swal.fire('Error inesperado al eliminar producto', error.message, 'error');
       return false;
     }
   };

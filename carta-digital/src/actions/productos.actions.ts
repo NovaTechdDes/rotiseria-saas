@@ -137,7 +137,12 @@ export const productsActions = () => {
 
   const startDeleteProducto = async (id: number): Promise<boolean> => {
     try {
-      const { error } = await supabase.from('Producto').delete().eq('id', id);
+      const { error } = await supabase
+        .from('Producto')
+        .update({
+          mostrar: false,
+        })
+        .eq('id', id);
       if (error) {
         await Swal.fire('Error al eliminar el producto', error.message, 'error');
         return false;

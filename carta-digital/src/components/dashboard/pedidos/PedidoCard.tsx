@@ -12,11 +12,7 @@ interface PedidoCardProps {
 
 const ESTADOS = ['Pendiente', 'Preparando', 'Listo', 'Entregado'];
 
-export const PedidoCard = ({
-  pedido,
-  onEstadoChange,
-  onDelete,
-}: PedidoCardProps) => {
+export const PedidoCard = ({ pedido, onEstadoChange, onDelete }: PedidoCardProps) => {
   // Formatear fecha
   const fecha = new Date(pedido.created_at || '').toLocaleString('es-AR', {
     day: '2-digit',
@@ -32,9 +28,7 @@ export const PedidoCard = ({
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4">
         <div>
           <div className="flex items-center gap-3 text-gray-500 text-sm mb-1">
-            <span className="font-mono font-bold text-gray-400">
-              #{pedido.id}
-            </span>
+            <span className="font-mono font-bold text-gray-400">#{pedido.id}</span>
             <span className="flex items-center gap-1">
               <Clock size={14} /> {fecha}
             </span>
@@ -75,20 +69,15 @@ export const PedidoCard = ({
 
       {/* Lista de Productos (Tabla simple) */}
       <div className="bg-gray-50 rounded-lg p-4 mb-4">
-        <p className="text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">
-          Productos
-        </p>
+        <p className="text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">Productos</p>
         <div className="space-y-2">
           {/* Usamos movProductos si viene de la base de datos, o productos si es local */}
           {pedido.movProductos?.map((mov: any) => (
             <div key={mov.id} className="flex justify-between text-sm">
               <span className="text-gray-700">
-                <span className="font-bold">{mov.cantidad}x</span>{' '}
-                {mov.descripcion}
+                <span className="font-bold">{mov.cantidad}x</span> {mov.descripcion}
               </span>
-              <span className="font-medium text-gray-900">
-                ${mov.precioUnitario * mov.cantidad}
-              </span>
+              <span className="font-medium text-gray-900">${mov.precioUnitario * mov.cantidad}</span>
             </div>
           ))}
         </div>
@@ -96,28 +85,18 @@ export const PedidoCard = ({
 
       {/* Footer: Total y Acciones */}
       <div className="flex justify-between items-center pt-2 border-t border-gray-100">
-        <div className="text-2xl font-bold text-orange-600">
-          Total: ${pedido.total}
-        </div>
+        <div className="text-2xl font-bold text-orange-600">Total: ${pedido.total}</div>
 
         <div className="flex gap-3">
           {/* Botón Eliminar */}
-          <Button
-            variant="danger"
-            onClick={() => onDelete(pedido.id!)}
-            className="px-3"
-          >
+          <Button variant="danger" onClick={() => onDelete(pedido.id!)} className="px-3">
             <Trash2 size={18} /> Eliminar
           </Button>
         </div>
       </div>
 
       {/* Observaciones si existen */}
-      {pedido.observaciones && (
-        <div className="mt-4 text-sm text-gray-500 bg-yellow-50 p-3 rounded border border-yellow-100 italic">
-          "Note: {pedido.observaciones}"
-        </div>
-      )}
+      {pedido.observaciones && <div className="mt-4 text-sm text-gray-500 bg-yellow-50 p-3 rounded border border-yellow-100 italic">"Note: {pedido.observaciones}"</div>}
     </div>
   );
 };

@@ -8,7 +8,9 @@ export interface Producto {
   precio: number;
   imagen?: string;
   imagenFile?: File | null;
-  activo: boolean;
+  stock: boolean;
+
+  mostrar: boolean;
   categoriaId: number;
   rotiseriaId: number;
   Categoria?: Categoria;
