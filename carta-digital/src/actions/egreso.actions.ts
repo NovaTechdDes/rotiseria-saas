@@ -94,11 +94,13 @@ export const egresoActions = () => {
 
   /*
         Para eliminar un egreso necesitamos el id que nos biene como parametro del tipo number,
-        lo eliminamos comparando el id con eq('id', id), si todo va bien retornamos true, sino fals
+        lo eliminamos comparando el id con eq('id', id), si todo va bien retornamos true, sino false
+
+        Nunca eliminamos un egreso, sino que directamente lo que hacemos es no mostrarlo
     */
   const startDeleteEgreso = async (id: number): Promise<boolean> => {
     try {
-      const { error } = await supabase.from('Egreso').delete().eq('id', id);
+      const { error } = await supabase.from('Egreso').update({ mostrar: false }).eq('id', id);
 
       if (error) {
         await Swal.fire('Error al eliminar el egreso', error.message, 'error');
