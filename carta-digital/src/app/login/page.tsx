@@ -19,7 +19,7 @@ const Login = () => {
   }, [user, router]);
 
   const handleBack = () => {
-    router.back();
+    router.push('/');
   };
 
   const handleLogin = (e: React.FormEvent) => {

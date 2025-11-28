@@ -2,12 +2,14 @@
 import { loginSupabase, userAuthenticated } from '@/actions';
 import { supabase } from '@/lib/supabase';
 import { Session } from 'inspector/promises';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 
 export const useAuth = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const verificarAutenticacion = async () => {
     const res = await userAuthenticated();
@@ -29,6 +31,8 @@ export const useAuth = () => {
 
   const logOut = async () => {
     await supabase.auth.signOut();
+    router.push('/login');
+    router.refresh();
   };
 
   return {

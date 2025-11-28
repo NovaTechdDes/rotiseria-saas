@@ -2,9 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, ShoppingBag, Package, FolderOpen, LogOut, Store } from 'lucide-react';
-
-// Importamos los hooks necesarios
+import { LayoutDashboard, ShoppingBag, Package, FolderOpen, LogOut, Store, Settings, Wallet } from 'lucide-react';
 import { useAuth } from '@/hooks';
 import { useRotiseriaStore } from '@/store/useRotiseriaStore';
 
@@ -31,7 +29,17 @@ export default function AsideBar() {
       href: '/admin/categorias',
       icon: FolderOpen,
     },
-    // Puedes agregar más items aquí (ej: Reportes, Configuración)
+    {
+      name: 'Egresos',
+      href: '/admin/egresos',
+      icon: Wallet,
+    },
+    {
+      name: 'Configuración',
+      href: '/admin/configuracion',
+      icon: Settings,
+    }
+
   ];
 
   return (
@@ -83,7 +91,9 @@ export default function AsideBar() {
 
           {/* Botón de Cerrar Sesión */}
           <button
-            onClick={logOut}
+            onClick={() => {
+              logOut();
+            }}
             className="w-full cursor-pointer hover:opacity-80 flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
           >
             <LogOut size={18} />

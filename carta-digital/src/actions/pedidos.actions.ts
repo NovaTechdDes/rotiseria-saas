@@ -129,7 +129,7 @@ export const pedidosActions = () => {
       return true;
     } catch (error: any) {
       console.log(error);
-      await Swal.fire('Error inesperado al eliminar producto', error.message, 'error');
+      await Swal.fire('Error inesperado al eliminar pedido', error.message, 'error');
       return false;
     }
   };

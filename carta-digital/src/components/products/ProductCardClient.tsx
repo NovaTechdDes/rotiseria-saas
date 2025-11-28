@@ -29,15 +29,14 @@ export const ProductCardClient = ({
           height={500}
           className="w-full h-full object-cover"
         />
-        {/* Etiqueta de Precio Flotante */}
-        <span className="absolute top-3 right-3 bg-orange-600 text-white text-sm font-bold px-3 py-1 rounded-full shadow-md">
-          ${precio}
-        </span>
       </div>
 
       {/* Contenido */}
       <div className="p-5 flex flex-col flex-1">
-        <h3 className="font-bold text-gray-800 text-lg mb-1">{nombre}</h3>
+        <div className="flex justify-between items-start mb-1">
+          <h3 className="font-bold text-gray-800 text-lg">{nombre}</h3>
+          <span className="text-orange-600 font-bold text-lg">${precio}</span>
+        </div>
         <p className="text-gray-500 text-sm mb-4 line-clamp-2 flex-1">
           {descripcion}
         </p>
