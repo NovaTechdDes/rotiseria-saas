@@ -87,6 +87,7 @@ export const productsActions = () => {
       const { Categoria, imagenFile, ...productoSinCategoria } = producto;
       let imagenNueva = '';
       //Eliminaos la iomagen anterior
+
       if (imagenFile) {
         if (productoSinCategoria.imagen) {
           const oldPath = productoSinCategoria.imagen.split('/productos/')[1];
@@ -111,7 +112,7 @@ export const productsActions = () => {
         .from('Producto')
         .update({
           ...productoSinCategoria,
-          imagen: imagenNueva ?? productoSinCategoria.imagen,
+          imagen: imagenNueva === '' ? productoSinCategoria.imagen : imagenNueva,
         })
         .eq('id', producto.id);
       if (error) {

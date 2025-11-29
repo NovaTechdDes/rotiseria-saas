@@ -30,27 +30,17 @@ export const EgresoList = ({ egresos }: Props) => {
   };
 
   if (!egresos || egresos.length === 0) {
-    return (
-      <div className="text-center p-10 text-gray-500">
-        No se encontraron egresos.
-      </div>
-    );
+    return <div className="text-center p-10 text-gray-500">No se encontraron egresos.</div>;
   }
 
   return (
     <div className="flex flex-col gap-4">
       {egresos.map((egreso) => (
-        <div
-          key={egreso.id}
-          className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
-        >
+        <div key={egreso.id} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex-1">
-            <h3 className="text-lg font-bold text-gray-800">
-              {egreso.descripcion}
-            </h3>
+            <h3 className="text-lg font-bold text-gray-800 capitalize">{egreso.descripcion}</h3>
             <p className="text-sm text-gray-500 mt-1">
-              {egreso.TipoEgreso?.nombre} •{' '}
-              {new Date(egreso.created_at!).toLocaleDateString()}
+              {egreso.TipoEgreso?.nombre} • {new Date(egreso.created_at!).toLocaleDateString()}
             </p>
           </div>
 
@@ -59,14 +49,10 @@ export const EgresoList = ({ egresos }: Props) => {
               {new Intl.NumberFormat('es-AR', {
                 style: 'currency',
                 currency: 'ARS',
-                minimumFractionDigits: 0,
+                minimumFractionDigits: 2,
               }).format(egreso.importe)}
             </span>
-            <button
-              onClick={() => handleDelete(egreso.id!)}
-              className="bg-red-50 border border-red-100 text-red-600 p-2 rounded-lg hover:bg-red-100 transition-colors"
-              title="Eliminar"
-            >
+            <button onClick={() => handleDelete(egreso.id!)} className="bg-red-50 border border-red-100 text-red-600 p-2 rounded-lg hover:bg-red-100 transition-colors" title="Eliminar">
               <Trash2 size={20} />
             </button>
           </div>

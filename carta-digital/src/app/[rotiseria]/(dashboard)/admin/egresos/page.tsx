@@ -12,10 +12,10 @@ const EgresosPage = () => {
   const { rotiseriaActive } = useRotiseriaStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   const today = new Date();
   const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-  
+
   const [desde, setDesde] = useState(firstDay.toISOString().split('T')[0]);
   const [hasta, setHasta] = useState(today.toISOString().split('T')[0]);
 
@@ -36,11 +36,7 @@ const EgresosPage = () => {
   const handleSubmit = async (egreso: Egreso): Promise<boolean> => {
     try {
       await agregarEgreso.mutateAsync(egreso);
-      Swal.fire(
-        'Creado',
-        'El egreso ha sido registrado correctamente',
-        'success'
-      );
+      Swal.fire('Creado', 'El egreso ha sido registrado correctamente', 'success');
       return true;
     } catch (error) {
       console.error(error);
@@ -48,11 +44,7 @@ const EgresosPage = () => {
     }
   };
 
-  const filteredEgresos =
-    egresos?.filter(
-      (e) =>
-        e.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || [];
+  const filteredEgresos = egresos?.filter((e) => e.descripcion.toLowerCase().includes(searchTerm.toLowerCase())) || [];
 
   const totalEgresos = filteredEgresos.reduce((acc, curr) => acc + curr.importe, 0);
 
@@ -60,9 +52,7 @@ const EgresosPage = () => {
     <div className="p-8 bg-gray-50 min-h-screen">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-orange-600">Egresos</h1>
-        <p className="text-gray-500 mt-1">
-          Total: {filteredEgresos.length} egresos
-        </p>
+        <p className="text-gray-500 mt-1">Total: {filteredEgresos.length} egresos</p>
       </div>
 
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
@@ -85,7 +75,7 @@ const EgresosPage = () => {
               type="date"
               value={desde}
               onChange={(e) => setDesde(e.target.value)}
-              className="w-full p-2 border text-gray-300 border-gray-700 rounded-md focus:ring-orange-500 focus:border-orange-500"
+              className="w-full p-2 border text-gray-700 border-gray-700 rounded-md focus:ring-orange-500 focus:border-orange-500"
             />
           </div>
           <div>
@@ -94,7 +84,7 @@ const EgresosPage = () => {
               type="date"
               value={hasta}
               onChange={(e) => setHasta(e.target.value)}
-              className="w-full p-2 border text-gray-300 border-gray-700 rounded-md focus:ring-orange-500 focus:border-orange-500"
+              className="w-full p-2 border text-gray-700 border-gray-700 rounded-md focus:ring-orange-500 focus:border-orange-500"
             />
           </div>
         </div>
@@ -109,9 +99,7 @@ const EgresosPage = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full p-3 pl-10 rounded-xl border border-gray-200 shadow-sm bg-white focus:ring-2 focus:ring-orange-100 focus:outline-none text-gray-700 placeholder-gray-400"
           />
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-            🔍
-          </div>
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</div>
         </div>
         <button
           onClick={handleAddEgreso}
@@ -130,13 +118,7 @@ const EgresosPage = () => {
       )}
 
       {/* Modal */}
-      {isModalOpen && (
-        <EgresoForm
-          rotiseriaId={rotiseriaActive.id}
-          onClose={handleCloseModal}
-          onSubmit={handleSubmit}
-        />
-      )}
+      {isModalOpen && <EgresoForm rotiseriaId={rotiseriaActive.id} onClose={handleCloseModal} onSubmit={handleSubmit} />}
     </div>
   );
 };
