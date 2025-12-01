@@ -6,7 +6,6 @@ import { EgresoForm } from '@/components/admin/egresos/EgresoForm';
 import { Egreso } from '@/interface';
 import { useMutateEgresos } from '@/hooks/egresos/useMutateEgresos';
 import { useEgresos } from '@/hooks/egresos/useEgresos';
-import Swal from 'sweetalert2';
 
 const EgresosPage = () => {
   const { rotiseriaActive } = useRotiseriaStore();
@@ -35,9 +34,12 @@ const EgresosPage = () => {
 
   const handleSubmit = async (egreso: Egreso): Promise<boolean> => {
     try {
-      await agregarEgreso.mutateAsync(egreso);
-      Swal.fire('Creado', 'El egreso ha sido registrado correctamente', 'success');
-      return true;
+      const ok = await agregarEgreso.mutateAsync(egreso);
+      if (ok) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
       console.error(error);
       return false;

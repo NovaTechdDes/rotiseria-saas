@@ -3,7 +3,7 @@ import { useForm } from '@/hooks/useForm';
 import { Egreso } from '@/interface';
 import { useTipoEgresos } from '@/hooks/tipoEgresos/useTipoEgresos';
 import Swal from 'sweetalert2';
-import { useRotiseriaStore } from '@/store';
+import { mensaje } from '@/helpers/mensaje';
 
 interface Props {
   rotiseriaId: number;
@@ -16,6 +16,7 @@ const initialEgreso: Egreso = {
   importe: 0,
   tipoEgresoId: 0,
   rotiseriaId: 0,
+  mostrar: true,
 };
 
 export const EgresoForm = ({ rotiseriaId, onClose, onSubmit }: Props) => {
@@ -35,6 +36,8 @@ export const EgresoForm = ({ rotiseriaId, onClose, onSubmit }: Props) => {
 
     const success = await onSubmit(formState as Egreso);
     if (success) {
+      mensaje(`¡Egreso ${descripcion} agregado Correctamente!`, 'success');
+
       onClose();
       onResetForm();
     }
@@ -91,17 +94,10 @@ export const EgresoForm = ({ rotiseriaId, onClose, onSubmit }: Props) => {
           </div>
 
           <div className="flex justify-end space-x-2 mt-6">
-            <button
-              type="button"
-              onClick={onClose}
-              className="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded transition-colors"
-            >
+            <button type="button" onClick={onClose} className="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded transition-colors">
               Cancelar
             </button>
-            <button
-              type="submit"
-              className="cursor-pointer bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition-colors"
-            >
+            <button type="submit" className="cursor-pointer bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition-colors">
               Guardar
             </button>
           </div>

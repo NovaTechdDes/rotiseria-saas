@@ -9,4 +9,5 @@ export interface Egreso {
   usuarioId?: string;
   rotiseriaId?: number;
   TipoEgreso?: TipoEgreso;
+  mostrar: boolean;
 }
