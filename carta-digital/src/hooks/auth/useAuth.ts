@@ -1,7 +1,5 @@
 'use client';
-import { loginSupabase, userAuthenticated } from '@/actions';
-import { supabase } from '@/lib/supabase';
-import { Session } from 'inspector/promises';
+import { loginSupabase, logOutAction, userAuthenticated } from '@/actions';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
@@ -30,7 +28,8 @@ export const useAuth = () => {
   };
 
   const logOut = async () => {
-    await supabase.auth.signOut();
+    logOutAction();
+    setUser(null);
     router.push('/login');
     router.refresh();
   };

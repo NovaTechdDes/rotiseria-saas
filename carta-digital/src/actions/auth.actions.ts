@@ -1,7 +1,10 @@
+'use server';
 import { Usuario } from '@/interface';
 import { supabase } from '@/lib/supabase';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import Swal from 'sweetalert2';
-
+const SESSION_COOKIE_TOKEN = 'auth_session_token';
 export const loginSupabase = async (email: string, password: string) => {
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -20,6 +23,48 @@ export const loginSupabase = async (email: string, password: string) => {
   }
 };
 
+export const loginAction = async (formData: FormData) => {
+  const MAX_AGE_ONE_DAY = 60 * 60 * 24;
+  const cookieStore = await cookies();
+  let redirectUrl = '/admin/pedidos';
+
+  try {
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    const sessionToken = data.session?.access_token;
+
+    cookieStore.set(SESSION_COOKIE_TOKEN, sessionToken, {
+      httpOnly: true,
+      maxAge: MAX_AGE_ONE_DAY,
+      sameSite: 'lat',
+      path: '/',
+    });
+  } catch (error: any) {
+    redirectUrl = '/login';
+    console.log(error);
+    return error.message;
+  } finally {
+    redirect(redirectUrl);
+  }
+};
+
+export const logOutAction = async () => {
+  await supabase.auth.signOut();
+
+  const cookiesStore = await cookies();
+  cookiesStore.delete(SESSION_COOKIE_TOKEN);
+};
+
 export const userAuthenticated = async () => {
   try {
     const { data } = await supabase.auth.getUser();
@@ -28,11 +73,7 @@ export const userAuthenticated = async () => {
     return user;
   } catch (error: any) {
     console.log(error);
-    await Swal.fire(
-      'Error inesperado al obtener el usuario',
-      error.message,
-      'error'
-    );
+    await Swal.fire('Error inesperado al obtener el usuario', error.message, 'error');
   }
 };
 
@@ -46,11 +87,7 @@ export const getUsuarios = async (rotiseriaId: number) => {
     return data;
   } catch (error: any) {
     console.log(error);
-    await Swal.fire(
-      'Error inesperado al obtener los usuarios',
-      error.message,
-      'error'
-    );
+    await Swal.fire('Error inesperado al obtener los usuarios', error.message, 'error');
     return [];
   }
 };
