@@ -63,7 +63,6 @@ export const ClientDataModal = () => {
 
     // Ejecutamos la mutación (Guardar en Base de Datos)
     const ok = await agregar(nuevoPedido);
-    agregarPedido.mutate(nuevoPedido);
     if (ok) {
       closeModalClienteCarrito(); // Cerramos modal
       resetCarrito(); // Vaciamos carrito

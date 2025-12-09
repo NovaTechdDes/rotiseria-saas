@@ -1,5 +1,5 @@
 'use client';
-import { loginSupabase, logOutAction, userAuthenticated } from '@/actions';
+import { logOutAction, userAuthenticated } from '@/actions';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
@@ -14,19 +14,6 @@ export const useAuth = () => {
     setUser(res);
   };
 
-  const login = async (email: string, password: string) => {
-    setLoading(true);
-    try {
-      const session = await loginSupabase(email, password);
-      setUser(session);
-    } catch (error) {
-      await Swal.fire('Error al loguearse', '', 'error');
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const logOut = async () => {
     logOutAction();
     setUser(null);
@@ -36,7 +23,6 @@ export const useAuth = () => {
 
   return {
     verificarAutenticacion,
-    login,
     logOut,
     user,
     loading,

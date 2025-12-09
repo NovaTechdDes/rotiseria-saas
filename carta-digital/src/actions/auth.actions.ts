@@ -1,27 +1,12 @@
 'use server';
+
 import { Usuario } from '@/interface';
 import { supabase } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Swal from 'sweetalert2';
+
 const SESSION_COOKIE_TOKEN = 'auth_session_token';
-export const loginSupabase = async (email: string, password: string) => {
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) {
-      await Swal.fire('Error al loguearse', error.message, 'error');
-      return false;
-    }
-    return data.session;
-  } catch (error: any) {
-    console.log(error);
-    await Swal.fire('Error inseperado al loguearse', error.message, 'error');
-    return false;
-  }
-};
 
 export const loginAction = async (formData: FormData) => {
   const MAX_AGE_ONE_DAY = 60 * 60 * 24;
@@ -68,6 +53,8 @@ export const logOutAction = async () => {
 export const userAuthenticated = async () => {
   try {
     const { data } = await supabase.auth.getUser();
+
+    console.log(data);
 
     const { data: user } = await supabase.from('usuario').select().single();
     return user;

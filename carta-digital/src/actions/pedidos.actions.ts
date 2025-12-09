@@ -20,10 +20,16 @@ export const pedidosActions = () => {
         Si existe algun error lo mostramos y devolvemos un array vacio
     */
 
-  const startGetPedidos = async (id: number): Promise<Pedido[] | []> => {
+  const startGetPedidos = async (id: number, desde: string, hasta: string): Promise<Pedido[] | []> => {
     try {
-      const { data, error } = await supabase.from('Pedido').select('*, movProductos:MovProducto(*)').eq('rotiseriaId', id).eq('mostrar', true).order('created_at', { ascending: false });
-
+      const { data, error } = await supabase
+        .from('Pedido')
+        .select('*, movProductos:MovProducto(*)')
+        .eq('rotiseriaId', id)
+        .gte('created_at', `${desde}T00:00:00+00:00`)
+        .lte('created_at', `${hasta}T23:59:59+00:00`)
+        .eq('mostrar', true)
+        .order('created_at', { ascending: false });
       if (error) {
         await Swal.fire('Error al obtener los pedidos', error.message, 'error');
         return [];
@@ -72,7 +78,6 @@ export const pedidosActions = () => {
         p_rotiseriaid: pedido.rotiseriaId,
         p_productos: productosPlanos,
       });
-
       if (error) {
         console.log(error);
         await Swal.fire('Error al crear un pedido', error.message, 'error');

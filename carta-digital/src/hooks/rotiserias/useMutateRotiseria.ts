@@ -1,8 +1,7 @@
-import { rotiseriasActions } from '@/actions';
+import { startUpdateRotiseria } from '@/actions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useMutateRotiseria = () => {
-  const { startUpdateRotiseria } = rotiseriasActions();
   const queryClient = useQueryClient();
 
   const modificarRotiseriaMutation = useMutation({

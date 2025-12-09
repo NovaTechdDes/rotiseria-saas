@@ -5,15 +5,7 @@ import { Button } from '@/components/ui/Button';
 
 export const CartModal = () => {
   // 1. Conectamos con la "Comanda" (Store)
-  const {
-    productos,
-    total,
-    addItem,
-    subsItem,
-    modalAbierto,
-    closeModal,
-    openModalClienteCarrito,
-  } = useCarritoStore();
+  const { productos, total, addItem, subsItem, modalAbierto, closeModal, openModalClienteCarrito } = useCarritoStore();
 
   if (!modalAbierto) return null;
 
@@ -24,10 +16,7 @@ export const CartModal = () => {
         {/* Encabezado */}
         <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
           <h2 className="text-xl font-bold text-orange-800">Tu Pedido</h2>
-          <button
-            onClick={closeModal}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-          >
+          <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 transition-colors">
             <X size={24} />
           </button>
         </div>
@@ -41,25 +30,14 @@ export const CartModal = () => {
             </div>
           ) : (
             productos.map((item) => (
-              <div
-                key={item.producto.id}
-                className="flex items-center gap-4 bg-white border border-gray-100 p-3 rounded-xl shadow-sm"
-              >
+              <div key={item.producto.id} className="flex items-center gap-4 bg-white border border-gray-100 p-3 rounded-xl shadow-sm">
                 {/* Imagen pequeña */}
-                <img
-                  src={item.producto.imagen || '/placeholder.jpg'}
-                  alt={item.producto.nombre}
-                  className="w-16 h-16 rounded-lg object-cover bg-gray-100"
-                />
+                <img src={item.producto.imagen || '/placeholder.jpg'} alt={item.producto.nombre} className="w-16 h-16 rounded-lg object-cover bg-gray-100" />
 
                 {/* Info */}
                 <div className="flex-1">
-                  <h4 className="font-bold text-gray-800 text-sm">
-                    {item.producto.nombre}
-                  </h4>
-                  <p className="text-orange-600 font-bold text-sm">
-                    ${item.producto.precio}
-                  </p>
+                  <h4 className="font-bold text-gray-800 text-sm">{item.producto.nombre}</h4>
+                  <p className="text-orange-600 font-bold text-sm">${item.producto.precio}</p>
                 </div>
 
                 {/* Controles de Cantidad */}
@@ -70,9 +48,7 @@ export const CartModal = () => {
                   >
                     <Minus size={16} />
                   </button>
-                  <span className="font-bold text-gray-800 w-4 text-center">
-                    {item.cantidad}
-                  </span>
+                  <span className="font-bold text-gray-800 w-4 text-center">{item.cantidad}</span>
                   <button
                     onClick={() => addItem(item.producto.id!)}
                     className="w-8 h-8 flex items-center justify-center bg-white rounded-md shadow-sm text-gray-600 hover:text-orange-600 active:scale-95 transition-all"
@@ -90,9 +66,7 @@ export const CartModal = () => {
           <div className="p-5 border-t border-gray-100 bg-gray-50">
             <div className="flex justify-between items-center mb-4">
               <span className="text-gray-600 font-medium">Total:</span>
-              <span className="text-2xl font-black text-orange-600">
-                ${total}
-              </span>
+              <span className="text-2xl font-black text-orange-600">${total}</span>
             </div>
 
             <Button

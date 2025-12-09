@@ -1,3 +1,4 @@
+'use client';
 import { ListaProductos } from '@/store';
 import { useEffect, useState, type ChangeEvent } from 'react';
 
