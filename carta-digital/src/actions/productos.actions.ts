@@ -1,92 +1,151 @@
-import { Producto } from "@/interface";
-import { supabase } from "@/lib/supabase";
-import Swal from "sweetalert2";
+'use server';
+/*
+    En este arhcivo vamos a ejecutar las peticiones CRUD  a la base de datos de supabase
 
-export const productsActions = () => {
+    Cuando veamos Swal lo que haermos es mostrar un mensaje de error que surgio para informar al cliente
+*/
 
-    const startGetProductosByRotiseriaId = async (id: number): Promise<Producto[] | []> => {
-        try {
-            const { error, data } = await supabase.from('Producto').select('*, Categoria(id, nombre)').eq('rotiseriaId', id);
+import { Producto } from '@/interface';
+import { createClient } from '@/utils/supabase/server';
+/*
+        En la primera funcion vamos a obtener los productos de rotirias con el id que nos pasaron por parametro
 
-            if (error) {
-                await Swal.fire('Error al obtener los productos', error.message, 'error');
-                return [];
-            };
+        lo que hacemos es buscar esos productos en la base de datos y traerlos con la categoria a la que pertenecen
 
-            return data;
-        } catch (error: any) {
-            await Swal.fire('Error inesperado al obtener los productos', error.message, 'error');
-            return [];
-        };
-    };
+        Si existe algun error lo mostramos y devolvemos un array vacio
+    */
 
-    const startPostProducto = async (producto: Producto): Promise<boolean> => {
+export const startGetProductosByRotiseriaId = async (id: number): Promise<Producto[] | []> => {
+  const supabase = await createClient();
+  try {
+    const { error, data } = await supabase.from('Producto').select('*, Categoria(id, nombre)').eq('rotiseriaId', id);
 
-        try {
-            let imagen = '';
-            if (producto.imagenFile) {
-                const { data, error: errorPostImage } = await supabase.storage.from('productos').upload(`${Date.now()}-${producto?.imagenFile.name}`, producto.imagenFile)
-                if (errorPostImage) {
-                    await Swal.fire('Error al subir imagen', errorPostImage.message, 'error');
-                    return false;
-                };
+    if (error) {
+      return [];
+    }
+    return data;
+  } catch (error: any) {
+    console.log(error);
+    return [];
+  }
+};
 
-                const { data: publicURL } = await supabase.storage.from('productos').getPublicUrl(data.path);
-                imagen = publicURL.publicUrl;
-            }
-            const { imagenFile, ...productoSinFile } = producto
-            const { error } = await supabase.from('Producto').insert({
-                ...productoSinFile,
-                imagen: imagen
-            });
+/*
+        En la segunda funcion vamos a insertar un nuevo producto
 
-            if (error) {
-                await Swal.fire('Error al crear el producto', error.message, 'error');
-                return false;
-            };
+        lo que hacemos es insertar el producto en la base de datos y subir la imagen al storage de supabase
 
-            return true;
-        } catch (error: any) {
-            console.log(error);
-            await Swal.fire('Error inesperado al crear el producto', error.message, 'error')
-            return false;
+        Si existe algun error lo mostramos y devolvemos false
+    */
+
+export const startPostProducto = async (producto: Producto): Promise<boolean> => {
+  const supabase = await createClient();
+  try {
+    let imagen = '';
+    if (producto.imagenFile) {
+      const { data, error: errorPostImage } = await supabase.storage.from('productos').upload(`${Date.now()}-${producto?.imagenFile.name}`, producto.imagenFile);
+      if (errorPostImage) {
+        return false;
+      }
+
+      const { data: publicURL } = await supabase.storage.from('productos').getPublicUrl(data.path);
+      imagen = publicURL.publicUrl;
+    }
+    const { imagenFile, ...productoSinFile } = producto;
+
+    const { data, error } = await supabase.from('Producto').insert({
+      ...productoSinFile,
+      imagen: imagen,
+    });
+    console.log({ data, error });
+
+    if (error) {
+      return false;
+    }
+    return true;
+  } catch (error: any) {
+    console.log(error);
+    return false;
+  }
+};
+
+/*
+        En la tercera funcion vamos a actualizar un producto
+
+        lo que hacemos es actualizar el producto en la base de datos
+
+        Si existe algun error lo mostramos y devolvemos false
+
+    */
+
+export const startUpdateProducto = async (producto: Partial<Producto>): Promise<boolean> => {
+  const supabase = await createClient();
+  try {
+    const { Categoria, imagenFile, ...productoSinCategoria } = producto;
+    let imagenNueva = '';
+    //Eliminaos la iomagen anterior
+
+    if (imagenFile) {
+      if (productoSinCategoria.imagen) {
+        const oldPath = productoSinCategoria.imagen.split('/productos/')[1];
+        await supabase.storage.from('productos').remove([oldPath]);
+      }
+
+      //Creamos nueva imagen
+
+      if (producto.imagenFile) {
+        const { data, error: errorPostImage } = await supabase.storage.from('productos').upload(`${Date.now()}-${producto?.imagenFile.name}`, producto.imagenFile);
+        if (errorPostImage) {
+          return false;
         }
 
-    };
+        const { data: publicURL } = await supabase.storage.from('productos').getPublicUrl(data.path);
+        imagenNueva = publicURL.publicUrl;
+      }
+    }
 
-    const startUpdateProducto = async (producto: Partial<Producto>): Promise<boolean> => {
-        try {
-            const { Categoria, ...productoSinCategoria } = producto
-            const { error } = await supabase.from('Producto').update(productoSinCategoria).eq('id', producto.id);
-            if (error) {
-                await Swal.fire('Error al actualizar el producto', error.message, 'error');
-                return false;
-            }
-            return true;
-        } catch (error: any) {
-            await Swal.fire('Error inesperado al actualizar el producto', error.message, 'error');
-            return false;
-        }
-    };
+    const { error } = await supabase
+      .from('Producto')
+      .update({
+        ...productoSinCategoria,
+        imagen: imagenNueva === '' ? productoSinCategoria.imagen : imagenNueva,
+      })
+      .eq('id', producto.id);
+    if (error) {
+      return false;
+    }
+    return true;
+  } catch (error: any) {
+    console.error(error);
+    return false;
+  }
+};
 
-    const startDeleteProducto = async (id: number): Promise<boolean> => {
-        try {
-            const { error } = await supabase.from('Producto').delete().eq('id', id);
-            if (error) {
-                await Swal.fire('Error al eliminar el producto', error.message, 'error');
-                return false;
-            }
-            return true;
-        } catch (error: any) {
-            await Swal.fire('Error inesperado al eliminar el producto', error.message, 'error');
-            return false;
-        }
-    };
+/*
+        En la cuarta funcion vamos a eliminar un producto
 
-    return {
-        startDeleteProducto,
-        startGetProductosByRotiseriaId,
-        startPostProducto,
-        startUpdateProducto
-    };
+        lo que hacemos es eliminar el producto de la base de datos
+
+        Si existe algun error lo mostramos y devolvemos false
+
+        Tarea: Preguntar a Juan si realmente tenemos que eliminar los productos
+    */
+
+export const startDeleteProducto = async (id: number): Promise<boolean> => {
+  const supabase = await createClient();
+  try {
+    const { error } = await supabase
+      .from('Producto')
+      .update({
+        mostrar: false,
+      })
+      .eq('id', id);
+    if (error) {
+      return false;
+    }
+    return true;
+  } catch (error: any) {
+    console.error(error);
+    return false;
+  }
 };

@@ -19,7 +19,6 @@
     En egreso vamos a ver documentado el codigo en los dos archivos, para ver bien que hacen
 */
 
-
 export * from './categorias/useMutateCategoria';
 export * from './categorias/useCategorias';
 

@@ -1,10 +1,9 @@
-
-import '../styles/global.css'
+import '../styles/global.css';
 import { useRotiseriaByDominio } from '@/hooks';
 import { useRotiseriaStore } from '@/store/useRotiseriaStore';
 
 const Home = async ({ params }: { params: Promise<{ rotiseria: string }> }) => {
-  return null
-}
+  return null;
+};
 
-export default Home
+export default Home;

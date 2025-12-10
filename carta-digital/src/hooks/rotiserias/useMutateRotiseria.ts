@@ -1,20 +1,17 @@
-import { rotiseriasActions } from "@/actions";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { startUpdateRotiseria } from '@/actions';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useMutateRotiseria = () => {
-    const { startUpdateRotiseria } = rotiseriasActions();
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-    const modificarRotiseriaMutation = useMutation({
-        mutationFn: startUpdateRotiseria,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['rotiseria'] })
-        }
-    });
+  const modificarRotiseriaMutation = useMutation({
+    mutationFn: startUpdateRotiseria,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['rotiseria'] });
+    },
+  });
 
-
-    return {
-        modificarRotiseriaMutation
-    }
-
+  return {
+    modificarRotiseriaMutation,
+  };
 };

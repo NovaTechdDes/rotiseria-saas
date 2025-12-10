@@ -3,4 +3,4 @@
     todos tendrian que estar documentados porque hacen cosas especificas
 */
 
-export * from './erroresTipoEgreso'
+export * from './erroresTipoEgreso';

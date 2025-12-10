@@ -7,7 +7,6 @@
     En el archvio egreso.actions.ts esta documentado el codigo, los demas son parecidos
 */
 
-
 export * from './categorias.actions';
 export * from './egreso.actions';
 export * from './pedidos.actions';
