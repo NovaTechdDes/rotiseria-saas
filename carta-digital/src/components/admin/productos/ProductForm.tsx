@@ -10,7 +10,6 @@ interface Props {
   rotiseriaId: number;
   productToEdit?: Producto | null;
   onClose: () => void;
-  onSubmit: (product: Producto) => Promise<boolean>;
 }
 
 const initialProduct: Producto = {
@@ -19,22 +18,24 @@ const initialProduct: Producto = {
   precio: 0,
   categoriaId: 0,
   rotiseriaId: 0,
-  activo: true,
+  stock: true,
   imagenFile: null,
   imagen: '',
+  mostrar: true,
 };
 
-export const ProductForm = ({ productToEdit, onClose, onSubmit }: Props) => {
+export const ProductForm = ({ productToEdit, onClose }: Props) => {
   const { rotiseriaActive } = useRotiseriaStore();
   const { data: categorias, isLoading } = useCategorias(rotiseriaActive?.id ?? 0);
-  const { modificarProducto } = useMutateProductos();
+  const { modificarProducto, agregarProducto } = useMutateProductos();
   const { mutateAsync: modificarProductoAsync, isPending: modificarProductoPending } = modificarProducto;
+  const { mutateAsync: agregarProductoAsync, isPending: agregarProductoPending } = agregarProducto;
 
-  const { formState, onInputChange, onResetForm, nombre, descripcion, rotiseriaId, precio, categoriaId, activo, imagenFile } = useForm(productToEdit ?? initialProduct);
+  const { formState, onInputChange, onResetForm, nombre, descripcion, rotiseriaId, precio, categoriaId, stock, imagenFile } = useForm(productToEdit ?? initialProduct);
 
   //Cada vez que el id de la rotiseria cambia, se actualiza el formState
   useEffect(() => {
-      onInputChange({target: {name: 'rotiseriaId', value: rotiseriaActive?.id ?? 0}});
+    onInputChange({ target: { name: 'rotiseriaId', value: rotiseriaActive?.id ?? 0 } });
   }, [rotiseriaActive]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,7 +52,7 @@ export const ProductForm = ({ productToEdit, onClose, onSubmit }: Props) => {
         onResetForm();
       }
     } else {
-      const success = await onSubmit(formState as Producto);
+      const success = await agregarProductoAsync(formState as Producto);
       if (success) {
         onClose();
         onResetForm();
@@ -105,8 +106,8 @@ export const ProductForm = ({ productToEdit, onClose, onSubmit }: Props) => {
           </div>
 
           <div className="flex items-center">
-            <input type="checkbox" name="activo" checked={activo} onChange={onInputChange} className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-            <label className="ml-2 block text-sm text-gray-900">Activo</label>
+            <input type="checkbox" name="stock" checked={stock} onChange={onInputChange} className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+            <label className="ml-2 block text-sm text-gray-900">Stock</label>
           </div>
 
           <div className="flex justify-end space-x-2 mt-6">
@@ -118,8 +119,8 @@ export const ProductForm = ({ productToEdit, onClose, onSubmit }: Props) => {
                 {modificarProductoPending ? 'Modificando' : 'Modificar'}
               </button>
             ) : (
-              <button type="submit" className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Guardar
+              <button type="submit" disabled={agregarProductoPending} className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                {agregarProductoPending ? 'Guardando' : 'Guardar'}
               </button>
             )}
           </div>

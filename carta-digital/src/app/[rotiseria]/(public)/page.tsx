@@ -1,4 +1,4 @@
-import { categoriasActions, productsActions, startGetRotiseriaForDominio } from '@/actions';
+import { categoriasActions, startGetProductosByRotiseriaId, startGetRotiseriaForDominio } from '@/actions';
 import { BuscadorProductos } from '@/components/cart/BuscadorProductos';
 import { CartModal } from '@/components/cart/CartModal';
 import { ClientDataModal } from '@/components/cart/ClientDataModal';
@@ -8,7 +8,6 @@ import { CategoryFilter } from '@/components/ui/CategoryFilter';
 import Loading from '@/components/ui/Loading';
 import { headers } from 'next/headers';
 
-const { startGetProductosByRotiseriaId } = productsActions();
 const { startGetCategoriasByRotiseriaId } = categoriasActions();
 
 const RotiseriaPage = async () => {

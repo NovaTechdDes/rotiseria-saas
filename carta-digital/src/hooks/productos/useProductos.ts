@@ -1,7 +1,5 @@
-import { productsActions } from '@/actions';
+import { startGetProductosByRotiseriaId } from '@/actions';
 import { useQuery } from '@tanstack/react-query';
-
-const { startGetProductosByRotiseriaId } = productsActions();
 
 export const useProductos = (id: number) => {
   return useQuery({

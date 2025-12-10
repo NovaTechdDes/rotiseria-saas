@@ -1,9 +1,7 @@
-import { productsActions } from '@/actions';
+import { startDeleteProducto, startPostProducto, startUpdateProducto } from '@/actions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useMutateProductos = () => {
-  const { startPostProducto, startUpdateProducto, startDeleteProducto } =
-    productsActions();
   const queryClient = useQueryClient();
 
   const agregarProductoMutation = useMutation({
