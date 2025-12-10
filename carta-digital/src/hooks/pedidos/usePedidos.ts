@@ -1,7 +1,5 @@
-import { pedidosActions } from '@/actions';
+import { startGetPedidos } from '@/actions';
 import { useQuery } from '@tanstack/react-query';
-
-const { startGetPedidos } = pedidosActions();
 
 export const usePedidos = (id: number, desde: string, hasta: string) => {
   return useQuery({

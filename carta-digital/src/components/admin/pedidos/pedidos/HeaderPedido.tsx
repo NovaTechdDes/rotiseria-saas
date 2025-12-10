@@ -1,3 +1,4 @@
+'use client';
 import { Pedido } from '@/interface';
 import { usePedidoStore } from '@/store';
 import { ShoppingBag } from 'lucide-react';

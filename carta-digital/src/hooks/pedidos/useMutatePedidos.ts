@@ -1,9 +1,7 @@
-import { pedidosActions } from '@/actions';
+import { startDeletePedido, startPostPedido, startUpdatePedido } from '@/actions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useMutatePedidos = () => {
-  const { startUpdatePedido, startPostPedido, startDeletePedido } =
-    pedidosActions();
   const queryClient = useQueryClient();
 
   const agregarPedidoMutation = useMutation({

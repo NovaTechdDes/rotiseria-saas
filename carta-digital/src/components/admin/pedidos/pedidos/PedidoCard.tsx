@@ -3,16 +3,23 @@ import React from 'react';
 import { Clock, User, Phone, Trash2, MapPin } from 'lucide-react';
 import { Pedido } from '@/interface';
 import { Button } from '@/components/ui/Button';
+import Swal from 'sweetalert2';
+import { useMutatePedidos } from '@/hooks/pedidos/useMutatePedidos';
+import { mensaje } from '@/helpers/mensaje';
+import { useRouter } from 'next/navigation';
 
 interface PedidoCardProps {
   pedido: Pedido;
-  onEstadoChange: (id: number, nuevoEstado: string) => void;
-  onDelete: (id: number) => void;
 }
 
 const ESTADOS = ['Pendiente', 'Preparando', 'Listo', 'Entregado'];
 
-export const PedidoCard = ({ pedido, onEstadoChange, onDelete }: PedidoCardProps) => {
+export const PedidoCard = ({ pedido }: PedidoCardProps) => {
+  const router = useRouter();
+  const { eliminarPedido, modificarPedido } = useMutatePedidos();
+  const { mutateAsync: eliminar, isPending: isPendingEliminar } = eliminarPedido;
+  const { mutateAsync: modificar, isPending: isPendingModificar } = modificarPedido;
+
   // Formatear fecha
   const fecha = new Date(pedido.created_at || '').toLocaleString('es-AR', {
     day: '2-digit',
@@ -21,6 +28,43 @@ export const PedidoCard = ({ pedido, onEstadoChange, onDelete }: PedidoCardProps
     hour: '2-digit',
     minute: '2-digit',
   });
+
+  // Manejador para eliminar con confirmación
+  const handleDelete = async (id: number) => {
+    const { isConfirmed } = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'No podrás revertir esta acción',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    });
+
+    if (isConfirmed) {
+      const { ok, msg } = await eliminar(id);
+      if (ok) {
+        mensaje(msg, 'success');
+        router.refresh();
+      } else {
+        await Swal.fire('Error al eliminar el pedido', msg, 'error');
+      }
+    }
+  };
+
+  // Manejador para cambiar estado
+  const handleEstadoChange = async (id: number, nuevoEstado: string) => {
+    const { ok, msg } = await modificar({ id, estado: nuevoEstado });
+    if (ok) {
+      mensaje(msg, 'success');
+      router.refresh();
+    } else {
+      await Swal.fire('Error al cambiar el estado', msg, 'error');
+    }
+  };
+
+  if (!pedido.mostrar) return null;
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-4 transition-all hover:shadow-md">
@@ -54,7 +98,7 @@ export const PedidoCard = ({ pedido, onEstadoChange, onDelete }: PedidoCardProps
           {ESTADOS.map((estado) => (
             <button
               key={estado}
-              onClick={() => onEstadoChange(pedido.id!, estado)}
+              onClick={() => handleEstadoChange(pedido.id!, estado)}
               className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
                 pedido.estado === estado
                   ? 'bg-orange-500 text-white border-orange-500 shadow-sm' // Activo
@@ -89,14 +133,14 @@ export const PedidoCard = ({ pedido, onEstadoChange, onDelete }: PedidoCardProps
 
         <div className="flex gap-3">
           {/* Botón Eliminar */}
-          <Button variant="danger" onClick={() => onDelete(pedido.id!)} className="px-3">
-            <Trash2 size={18} /> Eliminar
+          <Button variant="danger" disabled={isPendingEliminar} onClick={() => handleDelete(pedido.id!)} className="px-3">
+            <Trash2 size={18} /> {isPendingEliminar ? 'Eliminando...' : 'Eliminar'}
           </Button>
         </div>
       </div>
 
       {/* Observaciones si existen */}
-      {pedido.observaciones && <div className="mt-4 text-sm text-gray-500 bg-yellow-50 p-3 rounded border border-yellow-100 italic">"Note: {pedido.observaciones}"</div>}
+      {pedido.observaciones && <div className="mt-4 text-sm text-gray-500 bg-yellow-50 p-3 rounded border border-yellow-100 italic">Note: {pedido.observaciones}</div>}
     </div>
   );
 };

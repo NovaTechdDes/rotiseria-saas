@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-const SESSION_COOKIE_NAME = 'auth_session_token';
+import { createClient } from '@/utils/supabase/server';
 
-export function proxy(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const url = req.nextUrl.clone();
   const host = req.headers.get('host') || '';
 
@@ -9,8 +9,7 @@ export function proxy(req: NextRequest) {
   const [subdomain] = host.split('.');
 
   if (url.pathname.startsWith('/login')) {
-    const isAuthenticated = req.cookies.has(SESSION_COOKIE_NAME);
-    if (isAuthenticated) {
+    if (await verificarSesion()) {
       return NextResponse.redirect(new URL('/admin/pedidos', req.url));
     }
 
@@ -23,10 +22,8 @@ export function proxy(req: NextRequest) {
   }
 
   //Logica de proteccion de rutas En admin podemos entrar solamente si estamos authetincados
-  console.log(url.pathname);
   if (url.pathname.startsWith('/admin')) {
-    const isAuthenticated = req.cookies.has(SESSION_COOKIE_NAME);
-    if (!isAuthenticated) {
+    if (!(await verificarSesion())) {
       return NextResponse.redirect(new URL('/login', req.url));
     }
   }
@@ -43,4 +40,17 @@ export function proxy(req: NextRequest) {
 
 export const config = {
   matcher: ['/((?!_next|favicon.ico).*)'],
+};
+
+const verificarSesion = async () => {
+  const supabase = await createClient();
+  const { data } = (await supabase.auth.getUser()) || false;
+  let isAuthenticated = false;
+
+  if (data.user) {
+    isAuthenticated = true;
+  } else {
+    isAuthenticated = false;
+  }
+  return isAuthenticated;
 };

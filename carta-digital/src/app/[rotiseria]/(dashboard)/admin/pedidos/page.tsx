@@ -1,51 +1,17 @@
-'use client';
+'use server';
 
-import { usePedidos } from '@/hooks/pedidos/usePedidos';
-import { useMutatePedidos } from '@/hooks/pedidos/useMutatePedidos';
-import { useRotiseriaStore } from '@/store/useRotiseriaStore';
 import { PedidoCard } from '@/components/admin/pedidos/pedidos/PedidoCard';
-import Loading from '@/components/ui/Loading';
-import Swal from 'sweetalert2';
 import { ShoppingBag } from 'lucide-react';
 import { HeaderPedido } from '@/components/admin/pedidos/pedidos/HeaderPedido';
-import { usePedidoStore } from '@/store';
+import { startGetPedidos, startGetRotiseriaForDominio } from '@/actions';
+import { headers } from 'next/headers';
 
-const PedidosPage = () => {
-  const { rotiseriaActive } = useRotiseriaStore();
-  const { desde, hasta } = usePedidoStore();
+const PedidosPage = async () => {
+  const currentDomain = (await headers()).get('host')?.split('.')[0];
+  const rotiseriaActive = await startGetRotiseriaForDominio(currentDomain || '');
 
   // Traemos los pedidos de la base de datos
-  const { data: pedidos, isLoading } = usePedidos(rotiseriaActive?.id || 0, desde, hasta);
-
-  // Traemos las funciones para modificar (Editar Estado / Eliminar)
-  const { modificarPedido, eliminarPedido } = useMutatePedidos();
-
-  // Manejador para cambiar estado
-  const handleEstadoChange = (id: number, nuevoEstado: string) => {
-    modificarPedido.mutate({ id, estado: nuevoEstado });
-    // No hace falta recargar, React Query actualiza solo
-  };
-
-  // Manejador para eliminar con confirmación
-  const handleDelete = (id: number) => {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: 'No podrás revertir esta acción',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        eliminarPedido.mutate(id);
-        Swal.fire('Eliminado!', 'El pedido ha sido eliminado.', 'success');
-      }
-    });
-  };
-
-  if (isLoading) return <Loading texto="Cargando pedidos..." />;
+  const pedidos = await startGetPedidos(rotiseriaActive.id, '2025-12-01', '2025-12-31');
 
   return (
     <div>
@@ -56,7 +22,7 @@ const PedidosPage = () => {
       {pedidos && pedidos.length > 0 ? (
         <div className="max-w-4xl">
           {pedidos.map((pedido) => (
-            <PedidoCard key={pedido.id} pedido={pedido} onEstadoChange={handleEstadoChange} onDelete={handleDelete} />
+            <PedidoCard key={pedido.id} pedido={pedido} />
           ))}
         </div>
       ) : (

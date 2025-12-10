@@ -2,22 +2,19 @@
 
 import { Usuario } from '@/interface';
 import { supabase } from '@/lib/supabase';
-import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import Swal from 'sweetalert2';
 
-const SESSION_COOKIE_TOKEN = 'auth_session_token';
-
 export const loginAction = async (formData: FormData) => {
-  const MAX_AGE_ONE_DAY = 60 * 60 * 24;
-  const cookieStore = await cookies();
+  const supabase = await createClient();
   let redirectUrl = '/admin/pedidos';
 
   try {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -25,18 +22,10 @@ export const loginAction = async (formData: FormData) => {
     if (error) {
       throw error;
     }
-
-    const sessionToken = data.session?.access_token;
-
-    cookieStore.set(SESSION_COOKIE_TOKEN, sessionToken, {
-      httpOnly: true,
-      maxAge: MAX_AGE_ONE_DAY,
-      sameSite: 'lat',
-      path: '/',
-    });
   } catch (error: any) {
     redirectUrl = '/login';
     console.log(error);
+
     return error.message;
   } finally {
     redirect(redirectUrl);
@@ -44,10 +33,11 @@ export const loginAction = async (formData: FormData) => {
 };
 
 export const logOutAction = async () => {
+  const supabase = await createClient();
+
   await supabase.auth.signOut();
 
-  const cookiesStore = await cookies();
-  cookiesStore.delete(SESSION_COOKIE_TOKEN);
+  redirect('/login');
 };
 
 export const userAuthenticated = async () => {

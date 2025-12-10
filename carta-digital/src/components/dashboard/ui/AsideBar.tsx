@@ -3,13 +3,12 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, ShoppingBag, Package, FolderOpen, LogOut, Store, Settings, Wallet } from 'lucide-react';
-import { useAuth } from '@/hooks';
 import { useRotiseriaStore } from '@/store/useRotiseriaStore';
+import { logOutAction } from '@/actions';
 
 export default function AsideBar() {
   // 1. Hooks para lógica de navegación y estado
   const pathname = usePathname();
-  const { logOut } = useAuth();
   const { rotiseriaActive } = useRotiseriaStore();
 
   // 2. Definimos los items del menú
@@ -38,8 +37,7 @@ export default function AsideBar() {
       name: 'Configuración',
       href: '/admin/configuracion',
       icon: Settings,
-    }
-
+    },
   ];
 
   return (
@@ -92,7 +90,7 @@ export default function AsideBar() {
           {/* Botón de Cerrar Sesión */}
           <button
             onClick={() => {
-              logOut();
+              logOutAction();
             }}
             className="w-full cursor-pointer hover:opacity-80 flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
           >
