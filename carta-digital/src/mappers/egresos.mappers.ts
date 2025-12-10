@@ -8,6 +8,7 @@ type EgresoFromBackend = {
   tipoEgresoId: number;
   usuarioId: number;
   rotiseriaId: number;
+  mostrar: boolean;
 };
 
 // Mapper de un solo egreso
@@ -19,6 +20,7 @@ export function mapEgresoFromBackend(data: EgresoFromBackend): Egreso {
     importe: data.importe,
     tipoEgresoId: data.tipoEgresoId,
     usuarioId: data.usuarioId,
+    mostrar: data.mostrar,
     rotiseriaId: data.rotiseriaId,
   };
 }

@@ -9,13 +9,12 @@ type RotiseriasFromBackend = {
   horario: string;
   logo: string;
   telefono: string;
+  color: string;
   direccion: string;
 };
 
 //Mappear una sola rotiseria
-export function mapRotiseriaFromBackend(
-  data: RotiseriasFromBackend
-): Rotiseria {
+export function mapRotiseriaFromBackend(data: RotiseriasFromBackend): Rotiseria {
   return {
     id: data.id,
     created_at: data.created_at,
@@ -24,6 +23,7 @@ export function mapRotiseriaFromBackend(
     slug: data.slug,
     horario: data.slug,
     logo: data.logo,
+    color: data.color,
     telefono: data.telefono,
     direccion: data.direccion,
   };

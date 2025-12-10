@@ -11,19 +11,17 @@ import Swal from 'sweetalert2';
 /*
     Aca lo que hacemos es pasarle un dominio al inicilaizar la aplicaicon y uscar una rotiseria por ese dominio y devolverla si la encuentra sino false
 */
-export const startGetRotiseriaForDominio = async (dominio: string): Promise<Rotiseria> => {
+export const startGetRotiseriaForDominio = async (dominio: string): Promise<Rotiseria | null> => {
   try {
     const { data, error } = await supabase.from('Rotiseria').select().eq('dominio', dominio).single();
 
     if (error) {
-      await Swal.fire('Error al obtener la rotiseria', error.message, 'error');
-      return {};
+      return null;
     }
 
     return data;
   } catch (error: any) {
-    await Swal.fire('Error inesperado al obtener la rotiseria', error.message, 'error');
-    return {};
+    return null;
   }
 };
 

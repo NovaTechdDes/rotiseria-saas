@@ -6,7 +6,7 @@ export interface Egreso {
   importe: number;
   descripcion: string;
   tipoEgresoId?: number;
-  usuarioId?: string;
+  usuarioId?: number;
   rotiseriaId?: number;
   TipoEgreso?: TipoEgreso;
   mostrar: boolean;

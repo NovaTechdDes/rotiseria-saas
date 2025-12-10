@@ -53,7 +53,7 @@ export const egresoActions = () => {
       return false;
     }
 
-    egreso.usuarioId = user.user.id;
+    egreso.usuarioId = Number(user.user.id);
 
     try {
       const { error } = await supabase.from('Egreso').insert(egreso);

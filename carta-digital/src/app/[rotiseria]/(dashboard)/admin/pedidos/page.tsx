@@ -11,7 +11,7 @@ const PedidosPage = async () => {
   const rotiseriaActive = await startGetRotiseriaForDominio(currentDomain || '');
 
   // Traemos los pedidos de la base de datos
-  const pedidos = await startGetPedidos(rotiseriaActive.id, '2025-12-01', '2025-12-31');
+  const pedidos = await startGetPedidos(rotiseriaActive?.id || 0, '2025-12-01', '2025-12-31');
 
   return (
     <div>

@@ -7,9 +7,10 @@ type ProductoFromBackend = {
   descripcion: string;
   precio: number;
   imagen: string;
-  activo: boolean;
+  stock: boolean;
   categoriaId: number;
   rotiseriaId: number;
+  mostrar: boolean;
 };
 
 export function mapProductoFromBackend(data: ProductoFromBackend): Producto {
@@ -20,15 +21,14 @@ export function mapProductoFromBackend(data: ProductoFromBackend): Producto {
     descripcion: data.descripcion,
     precio: data.precio,
     imagen: data.imagen,
-    activo: data.activo,
+    stock: data.stock,
+    mostrar: data.mostrar,
     categoriaId: data.categoriaId,
     rotiseriaId: data.rotiseriaId,
   };
 }
 
 // Mappear un arreglo de productos
-export function mapProductosFromBackend(
-  data: ProductoFromBackend[]
-): Producto[] {
+export function mapProductosFromBackend(data: ProductoFromBackend[]): Producto[] {
   return data.map(mapProductoFromBackend);
 }
