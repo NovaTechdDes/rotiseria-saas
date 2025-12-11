@@ -1,27 +1,16 @@
-'use client';
-import Loading from '@/components/ui/Loading';
-import { useRotiseriaByDominio } from '@/hooks';
-import { useRotiseriaStore } from '@/store/useRotiseriaStore';
-import React, { useEffect } from 'react';
+import { startGetRotiseriaForDominio } from '@/actions';
 
-const RotiseriaLayout = ({
-  children,
-  params,
-}: {
+interface Props {
   children: React.ReactNode;
   params: Promise<{ rotiseria: string }>;
-}) => {
-  const resolvedParams = React.use(params);
-  const rotiseria = resolvedParams?.rotiseria;
-  const { setRotiseria, rotiseriaActive } = useRotiseriaStore();
-  const { data, isLoading } = useRotiseriaByDominio(rotiseria);
+}
 
-  useEffect(() => {
-    if (data) setRotiseria(data);
-  }, [data, setRotiseria]);
+const RotiseriaLayout = async ({ children, params }: Props) => {
+  const { rotiseria } = await params;
+  console.log(rotiseria);
+  const data = await startGetRotiseriaForDominio(rotiseria);
 
-  if (isLoading) return <Loading texto="Cargando Rotiseria..." />;
-  if (!data) return <div>No se encontro la rotiseria</div>;
+  if (!data) return <div className="flex h-screen items-center justify-center text-2xl font-bold text-red-500">No se encontro la rotiseria</div>;
 
   return <>{children}</>;
 };

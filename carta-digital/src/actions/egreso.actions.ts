@@ -21,7 +21,12 @@ import { createClient } from '@/utils/supabase/server';
 export const startGetEgresos = async (desde: string, hasta: string): Promise<Egreso[]> => {
   const supabase = await createClient();
   try {
-    const { data, error } = await supabase.from('Egreso').select('*, TipoEgreso:tipoEgresoId(*)').gte('created_at', `${desde}T00:00:00+00:00`).lte('created_at', `${hasta}T23:59:59+00:00`);
+    const { data, error } = await supabase
+      .from('Egreso')
+      .select('*, TipoEgreso:tipoEgresoId(*)')
+      .gte('created_at', `${desde}T00:00:00+00:00`)
+      .lte('created_at', `${hasta}T23:59:59+00:00`)
+      .eq('mostrar', true);
 
     if (error) {
       return [];
