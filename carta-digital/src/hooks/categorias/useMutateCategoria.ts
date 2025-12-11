@@ -1,9 +1,7 @@
-import { categoriasActions } from '@/actions';
+import { startDeleteCategoria, startPostCategoria, startUpdateCategoria } from '@/actions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useMutateCategorias = () => {
-  const { startUpdateCategoria, startPostCategoria, startDeleteCategoria } =
-    categoriasActions();
   const queryClient = useQueryClient();
 
   const agregarCategoriaMutation = useMutation({

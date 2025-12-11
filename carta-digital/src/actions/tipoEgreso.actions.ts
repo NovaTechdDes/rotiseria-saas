@@ -23,21 +23,13 @@ export const tipoEgresosActions = () => {
       const { data, error } = await supabase.from('TipoEgreso').select();
 
       if (error) {
-        await Swal.fire(
-          'Error al obtener los tipos de categorias',
-          error.message,
-          'error'
-        );
+        await Swal.fire('Error al obtener los tipos de categorias', error.message, 'error');
         return [];
       }
 
       return data;
     } catch (error: any) {
-      await Swal.fire(
-        'Error inesperadod al agregar categoria',
-        error.message,
-        'error'
-      );
+      await Swal.fire('Error inesperadod al agregar categoria', error.message, 'error');
       return [];
     }
   };
@@ -48,28 +40,18 @@ export const tipoEgresosActions = () => {
 
         Si da un error devolvemos un false sino true
     */
-  const startPostTipoEgreso = async (
-    tipoEgreso: TipoEgreso
-  ): Promise<boolean> => {
+  const startPostTipoEgreso = async (tipoEgreso: TipoEgreso): Promise<boolean> => {
     try {
       const { error } = await supabase.from('TipoEgreso').insert(tipoEgreso);
 
       if (error) {
-        await Swal.fire(
-          'Errro al cargar Tipo de Egreso',
-          error.message,
-          'error'
-        );
+        await Swal.fire('Errro al cargar Tipo de Egreso', error.message, 'error');
         return false;
       }
 
       return true;
     } catch (error: any) {
-      await Swal.fire(
-        'Error inesperadod al agregar categoria',
-        error.message,
-        'error'
-      );
+      await Swal.fire('Error inesperadod al agregar categoria', error.message, 'error');
       return false;
     }
   };
@@ -81,33 +63,20 @@ export const tipoEgresosActions = () => {
         Si da un error devolvemos un false sino true
     */
 
-  const startUpdateTipoEgreso = async (
-    tipoEgreso: TipoEgreso
-  ): Promise<boolean> => {
+  const startUpdateTipoEgreso = async (tipoEgreso: TipoEgreso): Promise<boolean> => {
     try {
-      const { error } = await supabase
-        .from('TipoEgreso')
-        .update(tipoEgreso)
-        .eq('id', tipoEgreso.id);
+      const { error } = await supabase.from('TipoEgreso').update(tipoEgreso).eq('id', tipoEgreso.id);
 
       if (error) {
-        console.log(error);
-        await Swal.fire(
-          'Error al modificar Tipo Egreso',
-          error.message,
-          'error'
-        );
+        console.error(error);
+        await Swal.fire('Error al modificar Tipo Egreso', error.message, 'error');
         return false;
       }
 
       return true;
     } catch (error: any) {
-      console.log(error);
-      await Swal.fire(
-        'Error inesperdao al modificar el Tipo Egreso',
-        error.message,
-        'error'
-      );
+      console.error(error);
+      await Swal.fire('Error inesperdao al modificar el Tipo Egreso', error.message, 'error');
       return false;
     }
   };
@@ -126,23 +95,15 @@ export const tipoEgresosActions = () => {
       const { error } = await supabase.from('TipoEgreso').delete().eq('id', id);
 
       if (error) {
-        await Swal.fire(
-          'Error al eliminar el tipo Egreso',
-          verificarError(error.code),
-          'error'
-        );
-        console.log(error);
+        await Swal.fire('Error al eliminar el tipo Egreso', verificarError(error.code), 'error');
+        console.error(error);
         return false;
       }
 
       return true;
     } catch (error: any) {
-      console.log(error);
-      await Swal.fire(
-        'Error inesperado al eliminar el Tipo de egreso',
-        error.message,
-        'error'
-      );
+      console.error(error);
+      await Swal.fire('Error inesperado al eliminar el Tipo de egreso', error.message, 'error');
       return false;
     }
   };

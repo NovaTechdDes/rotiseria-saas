@@ -29,11 +29,7 @@ export const reporteActions = () => {
     Tarea: Hacer la interface de resumen financiero
     
     */
-  const startGetReportesForDate = async (
-    desde: string,
-    hasta: string,
-    rotiseriaId: number
-  ): Promise<any> => {
+  const startGetReportesForDate = async (desde: string, hasta: string, rotiseriaId: number): Promise<any> => {
     try {
       const { data, error } = await supabase.rpc('obtener_resumen_financiero', {
         p_desde: new Date(desde + 'T00:00:00'),
@@ -42,17 +38,13 @@ export const reporteActions = () => {
       });
 
       if (error) {
-        await Swal.fire(
-          'Error al obtener los reportes',
-          error.message,
-          'error'
-        );
+        await Swal.fire('Error al obtener los reportes', error.message, 'error');
         return false;
       }
 
       return data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   };
@@ -65,33 +57,22 @@ export const reporteActions = () => {
         Si da un error devolvemos un false sino el array
     */
 
-  const startGetMostPopularProducto = async (
-    desde: string,
-    hasta: string,
-    rotiseriaId: number
-  ): Promise<ProductosPopulares[]> => {
+  const startGetMostPopularProducto = async (desde: string, hasta: string, rotiseriaId: number): Promise<ProductosPopulares[]> => {
     try {
-      const { data, error } = await supabase.rpc(
-        'obtener_productos_mas_vendidos',
-        {
-          p_desde: new Date(desde + 'T00:00:00'),
-          p_hasta: new Date(hasta + 'T23:59:59'),
-          p_rotiseriaid: rotiseriaId,
-        }
-      );
+      const { data, error } = await supabase.rpc('obtener_productos_mas_vendidos', {
+        p_desde: new Date(desde + 'T00:00:00'),
+        p_hasta: new Date(hasta + 'T23:59:59'),
+        p_rotiseriaid: rotiseriaId,
+      });
 
       if (error) {
-        await Swal.fire(
-          'Error al obtener los productos',
-          error.message,
-          'error'
-        );
+        await Swal.fire('Error al obtener los productos', error.message, 'error');
         return [];
       }
 
       return data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return [];
     }
   };
@@ -104,11 +85,7 @@ export const reporteActions = () => {
         Si da un error devolvemos un false sino el array
     */
 
-  const startGetTipoPagoPedido = async (
-    desde: string,
-    hasta: string,
-    rotiseriaId: number
-  ): Promise<TipoPago[]> => {
+  const startGetTipoPagoPedido = async (desde: string, hasta: string, rotiseriaId: number): Promise<TipoPago[]> => {
     try {
       const { data, error } = await supabase.rpc('obtener_tipopago_ventas', {
         p_desde: new Date(desde + 'T00:00:00'),
@@ -118,22 +95,14 @@ export const reporteActions = () => {
       console.log(data);
 
       if (error) {
-        await Swal.fire(
-          'Error al obtener los tipo de pagos de los pedidos',
-          error.message,
-          'error'
-        );
+        await Swal.fire('Error al obtener los tipo de pagos de los pedidos', error.message, 'error');
         return [];
       }
 
       return data;
     } catch (error: any) {
-      console.log(error);
-      await Swal.fire(
-        'Error inesperado al obtener los tipos de los pagos de los pedidos',
-        error.message,
-        'error'
-      );
+      console.error(error);
+      await Swal.fire('Error inesperado al obtener los tipos de los pagos de los pedidos', error.message, 'error');
       return [];
     }
   };

@@ -25,7 +25,7 @@ export const startGetProductosByRotiseriaId = async (id: number): Promise<Produc
     }
     return data;
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     return [];
   }
 };
@@ -64,7 +64,7 @@ export const startPostProducto = async (producto: Producto): Promise<boolean> =>
     }
     return true;
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };

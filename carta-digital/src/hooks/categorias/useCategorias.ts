@@ -1,7 +1,5 @@
-import { categoriasActions } from '@/actions';
+import { startGetCategoriasByRotiseriaId } from '@/actions';
 import { useQuery } from '@tanstack/react-query';
-
-const { startGetCategoriasByRotiseriaId } = categoriasActions();
 
 export const useCategorias = (id: number) => {
   return useQuery({

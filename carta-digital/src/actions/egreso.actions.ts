@@ -65,7 +65,7 @@ export const egresoActions = () => {
 
       return true;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return false;
     }
   };
@@ -86,7 +86,7 @@ export const egresoActions = () => {
 
       return true;
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       await Swal.fire('Error inesperado al actualizar el egreso', error.message, 'error');
       return false;
     }

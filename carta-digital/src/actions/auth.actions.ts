@@ -24,7 +24,7 @@ export const loginAction = async (formData: FormData) => {
     }
   } catch (error: any) {
     redirectUrl = '/login';
-    console.log(error);
+    console.error(error);
 
     return error.message;
   } finally {
@@ -49,7 +49,7 @@ export const userAuthenticated = async () => {
     const { data: user } = await supabase.from('usuario').select().single();
     return user;
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     await Swal.fire('Error inesperado al obtener el usuario', error.message, 'error');
   }
 };
@@ -63,7 +63,7 @@ export const getUsuarios = async (rotiseriaId: number) => {
     }
     return data;
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     await Swal.fire('Error inesperado al obtener los usuarios', error.message, 'error');
     return [];
   }
@@ -79,7 +79,7 @@ export const startPostUsuario = async (usuario: Usuario): Promise<boolean> => {
 
     return true;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };

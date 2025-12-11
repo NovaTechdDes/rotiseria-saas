@@ -1,14 +1,13 @@
-import { categoriasActions, startGetProductosByRotiseriaId, startGetRotiseriaForDominio } from '@/actions';
+'use server';
+import { startGetCategoriasByRotiseriaId, startGetProductosByRotiseriaId, startGetRotiseriaForDominio } from '@/actions';
 import { BuscadorProductos } from '@/components/cart/BuscadorProductos';
 import { CartModal } from '@/components/cart/CartModal';
 import { ClientDataModal } from '@/components/cart/ClientDataModal';
+import { GridProductos } from '@/components/cart/GridProductos';
 import { Navbar } from '@/components/layout/NavBar';
-import { ProductCardClient } from '@/components/products/ProductCardClient';
 import { CategoryFilter } from '@/components/ui/CategoryFilter';
 import Loading from '@/components/ui/Loading';
 import { headers } from 'next/headers';
-
-const { startGetCategoriasByRotiseriaId } = categoriasActions();
 
 const RotiseriaPage = async () => {
   const currentDomain = (await headers()).get('host')?.split('.')[0];
@@ -16,13 +15,9 @@ const RotiseriaPage = async () => {
   // 1. Obtenemos la rotisería que cargó el Layout
   const rotiseriaActive = await startGetRotiseriaForDominio(currentDomain || '');
 
-  const productos = await startGetProductosByRotiseriaId(rotiseriaActive?.id ?? 0);
   const categorias = await startGetCategoriasByRotiseriaId(rotiseriaActive?.id ?? 0);
 
-  // 3. Pantalla de Carga Inicial
-  // Si no hay rotisería o están cargando los datos, mostramos el spinner
-
-  if (!rotiseriaActive || productos.length === 0 || categorias.length === 0) {
+  if (!rotiseriaActive || categorias.length === 0) {
     return (
       <div className="h-screen flex items-center justify-center">
         <Loading texto="Cargando carta..." />
@@ -43,25 +38,7 @@ const RotiseriaPage = async () => {
         </div>
 
         {/* Grid de Productos */}
-        {productos && productos.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
-            {productos.map((producto) => (
-              <ProductCardClient
-                key={producto.id}
-                id={producto.id || 0}
-                nombre={producto.nombre}
-                descripcion={producto.descripcion}
-                precio={producto.precio}
-                imagen={producto.imagen || '/placeholder-comida.jpg'}
-                rotiseriaId={producto.rotiseriaId || 0}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20 text-gray-500 bg-white rounded-xl border border-dashed border-gray-300">
-            <p className="text-lg">No encontramos productos en esta categoría</p>
-          </div>
-        )}
+        <GridProductos rotiseriaId={rotiseriaActive?.id ?? 0} />
       </main>
 
       {/*Modales*/}

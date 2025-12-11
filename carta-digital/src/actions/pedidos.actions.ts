@@ -36,7 +36,7 @@ export const startGetPedidos = async (id: number, desde: string, hasta: string):
     }
     return data;
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
 
     return [];
   }
@@ -78,7 +78,7 @@ export const startPostPedido = async (pedido: Pedido): Promise<boolean> => {
       p_productos: productosPlanos,
     });
     if (error) {
-      console.log(error);
+      console.error(error);
 
       return false;
     }
@@ -115,7 +115,7 @@ export const startUpdatePedido = async (pedido: Partial<Pedido>): Promise<{ ok: 
       msg: 'Pedido actualizado',
     };
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     return {
       ok: false,
       msg: error.message,
@@ -136,7 +136,7 @@ export const startDeletePedido = async (id: number): Promise<{ ok: boolean; msg:
     const { error } = await supabase.from('Pedido').update({ mostrar: false }).eq('id', id);
 
     if (error) {
-      console.log(error);
+      console.error(error);
       return {
         ok: false,
         msg: error.message,
@@ -147,7 +147,7 @@ export const startDeletePedido = async (id: number): Promise<{ ok: boolean; msg:
       msg: 'Pedido eliminado',
     };
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     return {
       ok: false,
       msg: error.message,

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRotiseriaStore } from '@/store/useRotiseriaStore';
 import { CategoryList } from '@/components/admin/categorias/CategoryList';
 import { CategoryForm } from '@/components/admin/categorias/CategoryForm';
@@ -15,10 +15,7 @@ const CategoriasPage = () => {
 
   const { agregarCategoria, modificarCategoria } = useMutateCategorias();
 
-  const { data: categorias, isLoading } = useCategorias(
-    rotiseriaActive?.id || 0
-  );
-
+  const { data: categorias, isLoading } = useCategorias(rotiseriaActive?.id || 0);
   if (!rotiseriaActive) return null;
 
   const handleAddCategory = () => {
@@ -40,18 +37,10 @@ const CategoriasPage = () => {
     try {
       if (category.id) {
         await modificarCategoria.mutateAsync(category);
-        Swal.fire(
-          'Actualizada',
-          'La categoría ha sido actualizada correctamente',
-          'success'
-        );
+        Swal.fire('Actualizada', 'La categoría ha sido actualizada correctamente', 'success');
       } else {
         await agregarCategoria.mutateAsync(category);
-        Swal.fire(
-          'Creada',
-          'La categoría ha sido creada correctamente',
-          'success'
-        );
+        Swal.fire('Creada', 'La categoría ha sido creada correctamente', 'success');
       }
       return true;
     } catch (error) {
@@ -66,9 +55,7 @@ const CategoriasPage = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-orange-600">Categorías</h1>
-          <p className="text-gray-500 mt-1">
-            Total: {categorias?.length || 0} categorías
-          </p>
+          <p className="text-gray-500 mt-1">Total: {categorias?.length || 0} categorías</p>
         </div>
         <button
           onClick={handleAddCategory}
@@ -84,21 +71,11 @@ const CategoriasPage = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
         </div>
       ) : (
-        <CategoryList
-          categories={categorias || []}
-          onEdit={handleEditCategory}
-        />
+        <CategoryList categories={categorias || []} onEdit={handleEditCategory} />
       )}
 
       {/* Modal */}
-      {isModalOpen && (
-        <CategoryForm
-          rotiseriaId={rotiseriaActive.id}
-          categoryToEdit={categoryToEdit}
-          onClose={handleCloseModal}
-          onSubmit={handleSubmit}
-        />
-      )}
+      {isModalOpen && <CategoryForm rotiseriaId={rotiseriaActive.id} categoryToEdit={categoryToEdit} onClose={handleCloseModal} onSubmit={handleSubmit} />}
     </div>
   );
 };
