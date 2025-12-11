@@ -11,10 +11,8 @@
     devuelve lo que tiene en cache.
 */
 
-import { egresoActions } from '@/actions';
+import { startGetEgresos } from '@/actions';
 import { useQuery } from '@tanstack/react-query';
-
-const { startGetEgresos } = egresoActions();
 
 export const useEgresos = (desde: string, hasta: string) => {
   return useQuery({

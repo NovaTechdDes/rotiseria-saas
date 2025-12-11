@@ -31,11 +31,7 @@ export const TipoEgresoList = ({ tiposEgresos, onEdit }: Props) => {
   };
 
   if (!tiposEgresos || tiposEgresos.length === 0) {
-    return (
-      <div className="text-center p-10 text-gray-500">
-        No se encontraron tipos de egresos.
-      </div>
-    );
+    return <div className="text-center p-10 text-gray-500">No se encontraron tipos de egresos.</div>;
   }
 
   return (
@@ -54,23 +50,13 @@ export const TipoEgresoList = ({ tiposEgresos, onEdit }: Props) => {
         <tbody className="bg-white divide-y divide-gray-200">
           {tiposEgresos.map((tipo) => (
             <tr key={tipo.id} className="hover:bg-gray-50 transition-colors">
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {tipo.nombre}
-              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{tipo.nombre}</td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div className="flex justify-end gap-3">
-                  <button
-                    onClick={() => onEdit(tipo)}
-                    className="text-indigo-600 hover:text-indigo-900"
-                    title="Editar"
-                  >
+                  <button onClick={() => onEdit(tipo)} className="text-gray-600 hover:text-gray-900 hover:cursor-pointer" title="Editar">
                     <Pencil size={18} />
                   </button>
-                  <button
-                    onClick={() => handleDelete(tipo.id!)}
-                    className="text-red-600 hover:text-red-900"
-                    title="Eliminar"
-                  >
+                  <button onClick={() => handleDelete(tipo.id!)} className="text-red-600 hover:text-red-900 hover:cursor-pointer" title="Eliminar">
                     <Trash2 size={18} />
                   </button>
                 </div>

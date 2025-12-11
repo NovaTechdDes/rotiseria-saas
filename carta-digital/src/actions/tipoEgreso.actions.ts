@@ -16,25 +16,19 @@ import { createClient } from '@/utils/supabase/server';
         Tarea: Ver si sin el id de la rotiseria igual nos trae solamente de esa rotiseria
     */
 
-export const startGetTipoEgreso = async (): Promise<TipoEgreso[] | { ok: boolean; msg: string }> => {
+export const startGetTipoEgreso = async (): Promise<TipoEgreso[]> => {
   const supabase = await createClient();
   try {
     const { data, error } = await supabase.from('TipoEgreso').select();
 
     if (error) {
-      return {
-        ok: false,
-        msg: 'Error al obtener los egresos',
-      };
+      return [];
     }
 
     return data;
   } catch (error: any) {
     console.log(error);
-    return {
-      ok: false,
-      msg: 'Error inseperado al obtener los egresos',
-    };
+    return [];
   }
 };
 

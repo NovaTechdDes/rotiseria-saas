@@ -1,4 +1,4 @@
-import { egresoActions } from '@/actions';
+import { startDeleteEgreso, startPostEgreso, startUpdateEgreso } from '@/actions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /*
@@ -12,9 +12,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 */
 
 export const useMutateEgresos = () => {
-  const { startPostEgreso, startUpdateEgreso, startDeleteEgreso } =
-    egresoActions();
-
   //Necesitamos traer el useQueryClient que engloba a toda la aplicacion
   const queryClient = useQueryClient();
 
