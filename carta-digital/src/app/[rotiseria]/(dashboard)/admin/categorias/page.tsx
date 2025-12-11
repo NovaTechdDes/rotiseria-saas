@@ -6,7 +6,7 @@ import { CategoryForm } from '@/components/admin/categorias/CategoryForm';
 import { Categoria } from '@/interface';
 import { useMutateCategorias } from '@/hooks/categorias/useMutateCategoria';
 import { useCategorias } from '@/hooks/categorias/useCategorias';
-import Swal from 'sweetalert2';
+import { mensaje } from '@/helpers/mensaje';
 
 const CategoriasPage = () => {
   const { rotiseriaActive } = useRotiseriaStore();
@@ -36,11 +36,19 @@ const CategoriasPage = () => {
   const handleSubmit = async (category: Categoria): Promise<boolean> => {
     try {
       if (category.id) {
-        await modificarCategoria.mutateAsync(category);
-        Swal.fire('Actualizada', 'La categoría ha sido actualizada correctamente', 'success');
+        const { ok, msg } = await modificarCategoria.mutateAsync(category);
+        if (ok) {
+          mensaje(msg, 'success');
+        } else {
+          mensaje(msg, 'error');
+        }
       } else {
-        await agregarCategoria.mutateAsync(category);
-        Swal.fire('Creada', 'La categoría ha sido creada correctamente', 'success');
+        const { ok, msg } = await agregarCategoria.mutateAsync(category);
+        if (ok) {
+          mensaje(msg, 'success');
+        } else {
+          mensaje(msg, 'error');
+        }
       }
       return true;
     } catch (error) {

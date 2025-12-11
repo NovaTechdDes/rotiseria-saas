@@ -7,6 +7,7 @@ import { TipoEgreso } from '@/interface';
 import { useMutateTipoEgresos } from '@/hooks/tipoEgresos/useMutateTipoEgresos';
 import { useTipoEgresos } from '@/hooks/tipoEgresos/useTipoEgresos';
 import Swal from 'sweetalert2';
+import { mensaje } from '@/helpers/mensaje';
 
 const ConfiguracionPage = () => {
   const { rotiseriaActive } = useRotiseriaStore();
@@ -36,19 +37,19 @@ const ConfiguracionPage = () => {
   const handleSubmit = async (tipo: TipoEgreso): Promise<boolean> => {
     try {
       if (tipo.id) {
-        await modificarTipoEgreso.mutateAsync(tipo);
-        Swal.fire(
-          'Actualizado',
-          'El tipo de egreso ha sido actualizado correctamente',
-          'success'
-        );
+        const { ok, msg } = await modificarTipoEgreso.mutateAsync(tipo);
+        if (ok) {
+          mensaje(msg, 'success');
+        } else {
+          mensaje(msg, 'error');
+        }
       } else {
-        await agregarTipoEgreso.mutateAsync(tipo);
-        Swal.fire(
-          'Creado',
-          'El tipo de egreso ha sido creado correctamente',
-          'success'
-        );
+        const { ok, msg } = await agregarTipoEgreso.mutateAsync(tipo);
+        if (ok) {
+          mensaje(msg, 'success');
+        } else {
+          mensaje(msg, 'error');
+        }
       }
       return true;
     } catch (error) {
@@ -62,9 +63,7 @@ const ConfiguracionPage = () => {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Configuración</h1>
-        <p className="text-gray-500 mt-1">
-          Gestiona los tipos de egresos y personaliza tu rotisería
-        </p>
+        <p className="text-gray-500 mt-1">Gestiona los tipos de egresos y personaliza tu rotisería</p>
       </div>
 
       {/* Tipos de Egresos Section */}
@@ -73,7 +72,7 @@ const ConfiguracionPage = () => {
           <h2 className="text-xl font-bold text-gray-800">Tipos de Egresos</h2>
           <button
             onClick={handleAddTipo}
-            className="bg-violet-600 hover:bg-violet-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm transition duration-150 ease-in-out flex items-center gap-2"
+            className="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm transition duration-150 ease-in-out flex items-center gap-2"
           >
             <span>+</span> Agregar Tipo
           </button>
@@ -81,25 +80,15 @@ const ConfiguracionPage = () => {
 
         {isLoading ? (
           <div className="flex justify-center items-center h-32">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
           </div>
         ) : (
-          <TipoEgresoList
-            tiposEgresos={tiposEgresos || []}
-            onEdit={handleEditTipo}
-          />
+          <TipoEgresoList tiposEgresos={(tiposEgresos as TipoEgreso[]) || []} onEdit={handleEditTipo} />
         )}
       </div>
 
       {/* Modal */}
-      {isModalOpen && (
-        <TipoEgresoForm
-          rotiseriaId={rotiseriaActive.id}
-          tipoEgresoToEdit={tipoEgresoToEdit}
-          onClose={handleCloseModal}
-          onSubmit={handleSubmit}
-        />
-      )}
+      {isModalOpen && <TipoEgresoForm rotiseriaId={rotiseriaActive.id} tipoEgresoToEdit={tipoEgresoToEdit} onClose={handleCloseModal} onSubmit={handleSubmit} />}
     </div>
   );
 };

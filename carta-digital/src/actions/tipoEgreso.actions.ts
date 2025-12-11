@@ -1,15 +1,13 @@
+'use server';
 /*
     en este archivo se encarga de todas las acciones relacionadas con el tipo de egreso que realiza las peticions CRUD a la base de datos
 
-    Si vemos Swal.fire es un carte para informar que algo no salio bien
+    
 */
 import { verificarError } from '@/helpers/erroresTipoEgreso';
 import { TipoEgreso } from '@/interface';
-import { supabase } from '@/lib/supabase';
-import Swal from 'sweetalert2';
-
-export const tipoEgresosActions = () => {
-  /*
+import { createClient } from '@/utils/supabase/server';
+/*
         En la primera funcion traemos los tipos de egresos de la rotiseria
         Nos devuelve un array de objetos con la informacion
 
@@ -18,70 +16,95 @@ export const tipoEgresosActions = () => {
         Tarea: Ver si sin el id de la rotiseria igual nos trae solamente de esa rotiseria
     */
 
-  const startGetTipoEgreso = async (): Promise<TipoEgreso[]> => {
-    try {
-      const { data, error } = await supabase.from('TipoEgreso').select();
+export const startGetTipoEgreso = async (): Promise<TipoEgreso[] | { ok: boolean; msg: string }> => {
+  const supabase = await createClient();
+  try {
+    const { data, error } = await supabase.from('TipoEgreso').select();
 
-      if (error) {
-        await Swal.fire('Error al obtener los tipos de categorias', error.message, 'error');
-        return [];
-      }
-
-      return data;
-    } catch (error: any) {
-      await Swal.fire('Error inesperadod al agregar categoria', error.message, 'error');
-      return [];
+    if (error) {
+      return {
+        ok: false,
+        msg: 'Error al obtener los egresos',
+      };
     }
-  };
 
-  /*
+    return data;
+  } catch (error: any) {
+    console.log(error);
+    return {
+      ok: false,
+      msg: 'Error inseperado al obtener los egresos',
+    };
+  }
+};
+
+/*
         En la segunda funcion agregamos un tipo de egreso a la rotiseria
         Nos devuelve true si lo agrega sino false
 
         Si da un error devolvemos un false sino true
     */
-  const startPostTipoEgreso = async (tipoEgreso: TipoEgreso): Promise<boolean> => {
-    try {
-      const { error } = await supabase.from('TipoEgreso').insert(tipoEgreso);
+export const startPostTipoEgreso = async (tipoEgreso: TipoEgreso): Promise<{ ok: boolean; msg: string }> => {
+  const supabase = await createClient();
+  try {
+    const { error } = await supabase.from('TipoEgreso').insert(tipoEgreso);
 
-      if (error) {
-        await Swal.fire('Errro al cargar Tipo de Egreso', error.message, 'error');
-        return false;
-      }
-
-      return true;
-    } catch (error: any) {
-      await Swal.fire('Error inesperadod al agregar categoria', error.message, 'error');
-      return false;
+    if (error) {
+      return {
+        ok: false,
+        msg: 'error al Agregar Tipo Egreso',
+      };
     }
-  };
 
-  /*
+    return {
+      ok: true,
+      msg: 'Tipo de egreso agregado correctamente',
+    };
+  } catch (error: any) {
+    console.log(error);
+    return {
+      ok: false,
+      msg: 'Error inseperado al agregar el tipo de egreso',
+    };
+  }
+};
+
+/*
         En la tercera funcion actualizamos un tipo de egreso de la rotiseria
         Nos devuelve true si lo actualiza sino false
 
         Si da un error devolvemos un false sino true
     */
 
-  const startUpdateTipoEgreso = async (tipoEgreso: TipoEgreso): Promise<boolean> => {
-    try {
-      const { error } = await supabase.from('TipoEgreso').update(tipoEgreso).eq('id', tipoEgreso.id);
+export const startUpdateTipoEgreso = async (tipoEgreso: TipoEgreso): Promise<{ ok: boolean; msg: string }> => {
+  const supabase = await createClient();
+  try {
+    const { error } = await supabase.from('TipoEgreso').update(tipoEgreso).eq('id', tipoEgreso.id);
 
-      if (error) {
-        console.error(error);
-        await Swal.fire('Error al modificar Tipo Egreso', error.message, 'error');
-        return false;
-      }
-
-      return true;
-    } catch (error: any) {
+    if (error) {
       console.error(error);
-      await Swal.fire('Error inesperdao al modificar el Tipo Egreso', error.message, 'error');
-      return false;
-    }
-  };
 
-  /*
+      return {
+        ok: false,
+        msg: 'Error al actualizar el tipo de egreso',
+      };
+    }
+
+    return {
+      ok: true,
+      msg: 'Tipo de egreso actualizado correctamente',
+    };
+  } catch (error: any) {
+    console.error(error);
+
+    return {
+      ok: false,
+      msg: 'Error inseperado al actualizar el tipo de egreso',
+    };
+  }
+};
+
+/*
         En la cuarta funcion eliminamos un tipo de egreso de la rotiseria
         Nos devuelve true si lo elimina sino false
 
@@ -90,28 +113,29 @@ export const tipoEgresosActions = () => {
         Tarea: Preguntar a Juan si eliminamos realmente el tipo de egreso o si lo desactivamos
     */
 
-  const startDeleteTipoEgreso = async (id: number): Promise<boolean> => {
-    try {
-      const { error } = await supabase.from('TipoEgreso').delete().eq('id', id);
+export const startDeleteTipoEgreso = async (id: number): Promise<{ ok: boolean; msg: string }> => {
+  const supabase = await createClient();
+  try {
+    const { error } = await supabase.from('TipoEgreso').delete().eq('id', id);
 
-      if (error) {
-        await Swal.fire('Error al eliminar el tipo Egreso', verificarError(error.code), 'error');
-        console.error(error);
-        return false;
-      }
-
-      return true;
-    } catch (error: any) {
+    if (error) {
       console.error(error);
-      await Swal.fire('Error inesperado al eliminar el Tipo de egreso', error.message, 'error');
-      return false;
+      return {
+        ok: false,
+        msg: verificarError(error.code),
+      };
     }
-  };
 
-  return {
-    startGetTipoEgreso,
-    startPostTipoEgreso,
-    startDeleteTipoEgreso,
-    startUpdateTipoEgreso,
-  };
+    return {
+      ok: true,
+      msg: 'Tipo de egreso eliminado correctamente',
+    };
+  } catch (error: any) {
+    console.error(error);
+
+    return {
+      ok: false,
+      msg: 'Error inseperado al eliminar el tipo de egreso',
+    };
+  }
 };

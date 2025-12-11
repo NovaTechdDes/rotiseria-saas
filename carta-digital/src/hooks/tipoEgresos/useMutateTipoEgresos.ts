@@ -1,9 +1,7 @@
-import { tipoEgresosActions } from '@/actions';
+import { startDeleteTipoEgreso, startPostTipoEgreso, startUpdateTipoEgreso } from '@/actions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useMutateTipoEgresos = () => {
-  const { startPostTipoEgreso, startUpdateTipoEgreso, startDeleteTipoEgreso } =
-    tipoEgresosActions();
   const queryClient = useQueryClient();
 
   const agregarTipoEgresoMutation = useMutation({

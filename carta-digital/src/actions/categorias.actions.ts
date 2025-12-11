@@ -15,7 +15,6 @@ import { createClient } from '@/utils/supabase/server';
 
 export const startGetCategoriasByRotiseriaId = async (id: number): Promise<Categoria[] | []> => {
   const supabase = await createClient();
-  console.log(id);
   try {
     const { data, error } = await supabase.from('Categoria').select().eq('rotiseriaId', id);
 
@@ -36,18 +35,28 @@ export const startGetCategoriasByRotiseriaId = async (id: number): Promise<Categ
         Si existe algun error lo mostramos y devolvemos false y sino devolvemos true
     */
 
-export const startPostCategoria = async (categoria: Categoria): Promise<boolean> => {
+export const startPostCategoria = async (categoria: Categoria): Promise<{ ok: boolean; msg: string }> => {
   const supabase = await createClient();
   try {
     const { error } = await supabase.from('Categoria').insert(categoria);
 
     if (error) {
-      return false;
+      return {
+        ok: false,
+        msg: error.message,
+      };
     }
 
-    return true;
-  } catch (e: any) {
-    return false;
+    return {
+      ok: true,
+      msg: 'Se modifico la categoria Correctamente',
+    };
+  } catch (error: any) {
+    console.error(error);
+    return {
+      ok: false,
+      msg: error.message,
+    };
   }
 };
 
@@ -57,18 +66,27 @@ export const startPostCategoria = async (categoria: Categoria): Promise<boolean>
         Si existe algun error lo mostramos y devolvemos false y sino devolvemos true
     */
 
-export const startUpdateCategoria = async (categoria: Partial<Categoria>): Promise<boolean> => {
+export const startUpdateCategoria = async (categoria: Partial<Categoria>): Promise<{ ok: boolean; msg: string }> => {
   const supabase = await createClient();
   try {
     const { error } = await supabase.from('Categoria').update(categoria).eq('id', categoria.id);
     if (error) {
-      return false;
+      return {
+        ok: false,
+        msg: error.message,
+      };
     }
 
-    return true;
+    return {
+      ok: true,
+      msg: 'Categoria actualizada correctamente',
+    };
   } catch (error: any) {
     console.error(error);
-    return false;
+    return {
+      ok: false,
+      msg: error.message,
+    };
   }
 };
 

@@ -1,7 +1,5 @@
-import { tipoEgresosActions } from '@/actions';
+import { startGetTipoEgreso } from '@/actions';
 import { useQuery } from '@tanstack/react-query';
-
-const { startGetTipoEgreso } = tipoEgresosActions();
 
 export const useTipoEgresos = () => {
   return useQuery({
