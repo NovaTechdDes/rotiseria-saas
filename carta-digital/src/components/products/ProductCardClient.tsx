@@ -1,6 +1,6 @@
 'use client';
 
-import { useCarritoStore, useProductoStore } from '@/store';
+import { useCarritoStore, useCategoriaStore, useProductoStore } from '@/store';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import Swal from 'sweetalert2';
@@ -12,16 +12,21 @@ interface ProductProps {
   precio: number;
   imagen: string;
   rotiseriaId: number;
+  categoriaId: number;
 }
 
-export const ProductCardClient = ({ id, nombre, descripcion, precio, imagen, rotiseriaId }: ProductProps) => {
+export const ProductCardClient = ({ id, nombre, descripcion, precio, imagen, rotiseriaId, categoriaId }: ProductProps) => {
   const { setProductos: agregarAlCarrito } = useCarritoStore();
+  const { categoriaSeleccionada } = useCategoriaStore();
   const { filtro } = useProductoStore();
 
   if (!nombre.toLocaleLowerCase().includes(filtro.toLocaleLowerCase())) {
     return null;
   }
 
+  if (categoriaSeleccionada !== 0 && categoriaSeleccionada !== categoriaId) {
+    return null;
+  }
   const handleAgregar = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const producto = {
@@ -56,7 +61,7 @@ export const ProductCardClient = ({ id, nombre, descripcion, precio, imagen, rot
       <div className="p-5 flex flex-col flex-1">
         <div className="flex justify-between items-start mb-1">
           <h3 className="font-bold text-gray-800 text-lg">{nombre}</h3>
-          <span className="text-orange-600 font-bold text-lg">${precio}</span>
+          <span className="text-orange-600 font-bold text-lg">${precio.toFixed(2)}</span>
         </div>
         <p className="text-gray-500 text-sm mb-4 line-clamp-2 flex-1">{descripcion}</p>
 

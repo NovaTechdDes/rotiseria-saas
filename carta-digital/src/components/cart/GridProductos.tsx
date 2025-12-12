@@ -11,7 +11,7 @@ export const GridProductos = async ({ rotiseriaId }: Props) => {
   return (
     <>
       {productos.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pb-20 bg-slate-200 p-2 rounded-lg shadow-lg">
           {productos.map((producto) => (
             <ProductCardClient
               key={producto.id}
@@ -21,6 +21,7 @@ export const GridProductos = async ({ rotiseriaId }: Props) => {
               precio={producto.precio}
               imagen={producto.imagen || '/placeholder-comida.jpg'}
               rotiseriaId={producto.rotiseriaId || 0}
+              categoriaId={producto.categoriaId || 0}
             />
           ))}
         </div>

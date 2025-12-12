@@ -12,6 +12,16 @@ interface Props {
   rotiseriaId: number;
 }
 
+const initialState = {
+  nombre: '',
+  telefono: '',
+  tipoPago: 'efectivo',
+  observaciones: '',
+  direccion: '',
+  envio: 'false',
+  vuelto: 0,
+};
+
 export const ClientDataModal = ({ rotiseriaId }: Props) => {
   // 1. Stores y Hooks
   const { modalClienteCarrito, closeModalClienteCarrito, productos, total, resetCarrito } = useCarritoStore();
@@ -20,14 +30,9 @@ export const ClientDataModal = ({ rotiseriaId }: Props) => {
   const { isPending, mutateAsync: agregar } = agregarPedido;
 
   // 2. Estado del Formulario
-  const [formData, setFormData] = useState({
-    nombre: '',
-    telefono: '',
-    tipoPago: 'efectivo',
-    observaciones: '',
-    direccion: '', // Opcional si es delivery
-    envio: false,
-  });
+  const [formData, setFormData] = useState(initialState);
+
+  const [error, setError] = useState<boolean>(false);
 
   // Si el modal no está activo, no renderizamos nada
   if (!modalClienteCarrito) return null;
@@ -42,8 +47,18 @@ export const ClientDataModal = ({ rotiseriaId }: Props) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.nombre || !formData.telefono) {
-      alert('Por favor completa nombre y teléfono');
+    if (!formData.nombre) {
+      setError(true);
+      return;
+    }
+
+    if (!formData.telefono) {
+      setError(true);
+      return;
+    }
+
+    if (formData.envio === 'true' && formData.direccion === '') {
+      setError(true);
       return;
     }
 
@@ -52,8 +67,8 @@ export const ClientDataModal = ({ rotiseriaId }: Props) => {
       cliente: formData.nombre,
       telefono: formData.telefono,
       direccion: formData.direccion,
-      envio: formData.envio ? 'Si' : 'No', // Ajustar según tu base de datos
-      vuelto: 0, // Podrías agregar un campo para "¿Con cuánto pagas?"
+      envio: formData.envio === 'true' ? true : false,
+      vuelto: formData.vuelto - total,
       total: total,
       estado: 'Pendiente',
       observaciones: formData.observaciones,
@@ -65,10 +80,13 @@ export const ClientDataModal = ({ rotiseriaId }: Props) => {
 
     // Ejecutamos la mutación (Guardar en Base de Datos)
     const ok = await agregar(nuevoPedido);
+
     if (ok) {
       closeModalClienteCarrito(); // Cerramos modal
       resetCarrito(); // Vaciamos carrito
+      setFormData(initialState); //Reseteamos el formulario
       Swal.fire('¡Pedido Enviado!', 'Tu pedido ha sido recibido correctamente.', 'success');
+      setError(false);
     }
   };
 
@@ -94,9 +112,10 @@ export const ClientDataModal = ({ rotiseriaId }: Props) => {
               value={formData.nombre}
               onChange={handleChange}
               placeholder="Tu nombre completo"
-              className="text-black placeholder-gray-300 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+              className="text-black placeholder-gray-400 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
               required
             />
+            {error && formData.nombre === '' && <p className="text-red-500 text-sm mt-1">Por favor completa el nombre</p>}
           </div>
 
           {/* Teléfono */}
@@ -108,9 +127,10 @@ export const ClientDataModal = ({ rotiseriaId }: Props) => {
               value={formData.telefono}
               onChange={handleChange}
               placeholder="Ej: 11 1234-5678"
-              className="text-black placeholder-gray-300 w-full px-4 py-2 border border-gray-400 rounded-lg  focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
+              className="text-black placeholder-gray-400 w-full px-4 py-2 border border-gray-400 rounded-lg  focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all"
               required
             />
+            {error && formData.telefono === '' && <p className="text-red-500 text-sm mt-1">Por favor completa el teléfono</p>}
           </div>
 
           {/* Forma de Pago */}
@@ -120,12 +140,43 @@ export const ClientDataModal = ({ rotiseriaId }: Props) => {
               name="tipoPago"
               value={formData.tipoPago}
               onChange={handleChange}
-              className="text-black placeholder-gray-300 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none bg-white"
+              className="text-black placeholder-gray-400 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none bg-white"
             >
               <option value="efectivo">Efectivo</option>
               <option value="transferencia">Mercado Pago / Transferencia</option>
               <option value="tarjeta">Tarjeta de Débito/Crédito</option>
             </select>
+          </div>
+
+          {/* Modalidad de Entrega */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="envio">
+              Modalidad de Entrega
+            </label>
+            <select
+              name="envio"
+              id="envio"
+              value={formData.envio}
+              onChange={handleChange}
+              className="text-black placeholder-gray-400 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none bg-white"
+            >
+              <option value="false">Retiro en el local</option>
+              <option value="true">Envio a domicilio</option>
+            </select>
+          </div>
+
+          <div className={`${formData.envio === 'true' ? 'block' : 'hidden'}`}>
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="direccion">
+              Direccion *
+            </label>
+            <input
+              type="text"
+              name="direccion"
+              value={formData.direccion}
+              onChange={handleChange}
+              className="text-black placeholder-gray-400 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition-all"
+            />
+            {error && formData.direccion === '' && <p className="text-red-500 text-sm mt-1">Por favor completa la dirección</p>}
           </div>
 
           {/* Observaciones */}
@@ -137,9 +188,24 @@ export const ClientDataModal = ({ rotiseriaId }: Props) => {
               onChange={handleChange}
               rows={2}
               placeholder="Ej: Sin mayonesa, timbre no funciona..."
-              className="text-black placeholder-gray-300 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition-all resize-none"
+              className="text-black placeholder-gray-400 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition-all resize-none"
             />
           </div>
+
+          {formData.tipoPago === 'efectivo' && formData.envio === 'true' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="vuelto">
+                ¿Con cuanto vas a Abonar? ¡Así llevamos el cambio justo!
+              </label>
+              <input
+                type="number"
+                className="text-black placeholder-gray-400 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition-all"
+                name="vuelto"
+                value={formData.vuelto}
+                onChange={handleChange}
+              />
+            </div>
+          )}
 
           <div className="pt-4 flex gap-3">
             <Button type="button" variant="secondary" fullWidth onClick={closeModalClienteCarrito}>

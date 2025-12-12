@@ -28,7 +28,7 @@ const RotiseriaPage = async () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar nombre={rotiseriaActive?.nombre ?? ''} telefono={rotiseriaActive?.telefono ?? ''} horario={rotiseriaActive?.horario ?? ''} logo={rotiseriaActive?.logo ?? ''} />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-6">
         {/* Buscador */}
         <BuscadorProductos />
 
