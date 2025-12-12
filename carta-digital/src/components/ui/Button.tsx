@@ -5,6 +5,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   // Definimos las variantes de estilo que usas en tus diseños
   variant?: 'primary' | 'pink' | 'secondary' | 'outline' | 'danger';
   fullWidth?: boolean;
+  text?: string;
 }
 
 export const Button = ({ children, variant = 'primary', fullWidth = false, className = '', ...props }: ButtonProps) => {
