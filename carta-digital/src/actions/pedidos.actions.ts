@@ -20,7 +20,6 @@ import { createClient } from '@/utils/supabase/server';
     */
 
 export const startGetPedidos = async (id: number, desde: string, hasta: string): Promise<Pedido[] | []> => {
-  console.log('Id Rotiseria', id);
   const supabase = await createClient();
 
   try {
@@ -56,6 +55,8 @@ export const startGetPedidos = async (id: number, desde: string, hasta: string):
   */
 
 export const startPostPedido = async (pedido: Pedido): Promise<boolean> => {
+  console.log('Id Rotiseria', pedido.rotiseriaId);
+  const supabase = await createClient();
   try {
     const productosPlanos = pedido.productos?.map((item) => ({
       cantidad: item.cantidad,

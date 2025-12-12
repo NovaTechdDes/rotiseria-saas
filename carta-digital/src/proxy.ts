@@ -8,12 +8,8 @@ export async function proxy(req: NextRequest) {
   const hostname = host.split(':')[0];
   const subdomain = hostname.split('.')[0];
 
-  console.log('HOST:', hostname);
-  console.log('PATH:', url.pathname);
-
   // Dominios principales donde SÍ aplica auth
   const isMainDomain = hostname === 'rotiseriasaas.com.ar' || hostname === 'www.rotiseriasaas.com.ar';
-  console.log('HostName: ', hostname);
 
   // 1) Ignorar assets
   if (url.pathname.startsWith('/_next') || url.pathname.startsWith('/api') || url.pathname.startsWith('/static')) {
@@ -21,9 +17,7 @@ export async function proxy(req: NextRequest) {
   }
 
   // 2) MANEJO DEL DOMINIO PRINCIPAL (panel, login, admin)
-  console.log('isMainDomain: ', isMainDomain);
   if (isMainDomain) {
-    console.log('a');
     const isAuthenticated = await verificarSesion();
 
     // /login
@@ -48,7 +42,6 @@ export async function proxy(req: NextRequest) {
   // Ej: rotiseriasaas.rotiseriasaas.com.ar → subdomain = rotiseriasaas
   if (subdomain !== 'www' && subdomain !== 'rotiseriasaas' && subdomain.length > 0) {
     // Reescribir hacia /[rotiseria]
-    console.log('b');
     const isAuthenticated = await verificarSesion();
 
     // /login
