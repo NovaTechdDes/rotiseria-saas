@@ -1,4 +1,4 @@
-'use server';
+/*'use server';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
@@ -46,3 +46,4 @@ const verificarSesion = async () => {
   const { data } = (await supabase.auth.getUser()) || false;
   return !!data.user;
 };
+*/
