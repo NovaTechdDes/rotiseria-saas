@@ -1,4 +1,4 @@
-/*'use server';
+'use server';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
@@ -26,12 +26,21 @@ export async function proxy(req: NextRequest) {
     }
   }
 
+  if (url.pathname.startsWith('/_next') || url.pathname.startsWith('/api') || url.pathname.startsWith('/static')) {
+    return NextResponse.next();
+  }
+
   const isLocalhost = host.includes('localhost');
-  console.log({ isLocalhost, subdomain });
+
   // Si estamos en localhost o sin subdominio → no hacer nada
-  if (isLocalhost && subdomain && subdomain !== 'localhost' && subdomain !== 'www') {
-    url.pathname = `/${subdomain}${url.pathname}`;
-    return NextResponse.rewrite(url);
+  if (isLocalhost) {
+    if (subdomain !== 'localhost' && subdomain != 'www') {
+      if (!url.pathname.startsWith(`/${subdomain}`)) {
+        url.pathname = `/${subdomain}${url.pathname}`;
+        return NextResponse.rewrite(url);
+      }
+    }
+    return NextResponse.next();
   }
 
   return NextResponse.next();
@@ -46,4 +55,3 @@ const verificarSesion = async () => {
   const { data } = (await supabase.auth.getUser()) || false;
   return !!data.user;
 };
-*/
