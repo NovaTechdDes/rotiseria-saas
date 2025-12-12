@@ -1,5 +1,5 @@
 'use server';
-import { startGetCategoriasByRotiseriaId, startGetProductosByRotiseriaId, startGetRotiseriaForDominio } from '@/actions';
+import { startGetCategoriasByRotiseriaId, startGetRotiseriaForDominio } from '@/actions';
 import { BuscadorProductos } from '@/components/cart/BuscadorProductos';
 import { CartModal } from '@/components/cart/CartModal';
 import { ClientDataModal } from '@/components/cart/ClientDataModal';
@@ -43,7 +43,7 @@ const RotiseriaPage = async () => {
 
       {/*Modales*/}
       <CartModal />
-      <ClientDataModal />
+      <ClientDataModal rotiseriaId={rotiseriaActive?.id ?? 0} />
     </div>
   );
 };

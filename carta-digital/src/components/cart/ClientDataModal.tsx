@@ -5,14 +5,16 @@ import Swal from 'sweetalert2'; // Usamos SweetAlert para confirmar
 
 // Imports de lógica
 import { useCarritoStore } from '@/store/useCarritoStore';
-import { useRotiseriaStore } from '@/store/useRotiseriaStore';
 import { useMutatePedidos } from '@/hooks/pedidos/useMutatePedidos';
 import { Button } from '@/components/ui/Button';
 
-export const ClientDataModal = () => {
+interface Props {
+  rotiseriaId: number;
+}
+
+export const ClientDataModal = ({ rotiseriaId }: Props) => {
   // 1. Stores y Hooks
   const { modalClienteCarrito, closeModalClienteCarrito, productos, total, resetCarrito } = useCarritoStore();
-  const { rotiseriaActive } = useRotiseriaStore();
   const { agregarPedido } = useMutatePedidos(); // El hook que guarda en la base de datos
 
   const { isPending, mutateAsync: agregar } = agregarPedido;
@@ -57,7 +59,7 @@ export const ClientDataModal = () => {
       observaciones: formData.observaciones,
       tipoPago: formData.tipoPago,
       usuarioId: 0, // Esto lo manejará el backend o se puede omitir si es público
-      rotiseriaId: rotiseriaActive?.id || 0,
+      rotiseriaId: rotiseriaId || 0,
       productos: productos, // Mandamos los productos del carrito
     };
 
@@ -143,8 +145,8 @@ export const ClientDataModal = () => {
             <Button type="button" variant="secondary" fullWidth onClick={closeModalClienteCarrito}>
               Cancelar
             </Button>
-            <Button type="submit" variant="primary" fullWidth disabled={agregarPedido.isPending}>
-              {agregarPedido.isPending ? (
+            <Button type="submit" variant="primary" fullWidth disabled={isPending}>
+              {isPending ? (
                 <span className="flex items-center gap-2">
                   <Loader2 className="animate-spin" /> Enviando...
                 </span>
