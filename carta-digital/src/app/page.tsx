@@ -5,7 +5,6 @@ import { headers } from 'next/headers';
 const Home = async () => {
   const host = (await headers()).get('host') || '';
   const subdomain = host.split('.')[0].split(':')[0];
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="bg-white p-8 rounded-lg shadow-xl text-center max-w-md w-full">

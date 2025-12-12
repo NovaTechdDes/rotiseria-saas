@@ -5,6 +5,8 @@ import { createClient } from '@/utils/supabase/server';
 export async function proxy(req: NextRequest) {
   const url = req.nextUrl.clone();
   const host = req.headers.get('host') || '';
+  console.log('HOST EN PRODUCCIÓN:', host);
+  console.log('URL EN PRODUCCIÓN:', url);
 
   // Detectar subdominio
   const subdomain = host.split('.')[0].split(':')[0];
