@@ -5,44 +5,52 @@ import { createClient } from '@/utils/supabase/server';
 export async function proxy(req: NextRequest) {
   const url = req.nextUrl.clone();
   const host = req.headers.get('host') || '';
-  console.log('HOST EN PRODUCCIÓN:', host);
-  console.log('URL EN PRODUCCIÓN:', url);
+  const hostname = host.split(':')[0];
+  const subdomain = hostname.split('.')[0];
 
-  // Detectar subdominio
-  const subdomain = host.split('.')[0].split(':')[0];
+  console.log('HOST:', hostname);
+  console.log('PATH:', url.pathname);
 
-  const isAuthenticated = await verificarSesion();
+  // Dominios principales donde SÍ aplica auth
+  const isMainDomain = hostname === 'rotiseriasaas.com.ar' || hostname === 'www.rotiseriasaas.com.ar';
+  console.log('HostName: ', hostname);
 
-  if (url.pathname.startsWith('/login')) {
-    if (isAuthenticated) {
-      return NextResponse.redirect(new URL('/admin/pedidos', req.url));
-    }
-
-    return NextResponse.next();
-  }
-
-  //Logica de proteccion de rutas En admin podemos entrar solamente si estamos authetincados
-  if (url.pathname.startsWith('/admin')) {
-    if (!isAuthenticated) {
-      return NextResponse.redirect(new URL('/login', req.url));
-    }
-  }
-
+  // 1) Ignorar assets
   if (url.pathname.startsWith('/_next') || url.pathname.startsWith('/api') || url.pathname.startsWith('/static')) {
     return NextResponse.next();
   }
 
-  const isLocalhost = host.includes('localhost');
+  // 2) MANEJO DEL DOMINIO PRINCIPAL (panel, login, admin)
+  console.log('isMainDomain: ', isMainDomain);
+  if (isMainDomain) {
+    console.log('a');
+    const isAuthenticated = await verificarSesion();
 
-  // Si estamos en localhost o sin subdominio → no hacer nada
-  if (isLocalhost) {
-    if (subdomain !== 'localhost' && subdomain != 'www') {
-      if (!url.pathname.startsWith(`/${subdomain}`)) {
-        url.pathname = `/${subdomain}${url.pathname}`;
-        return NextResponse.rewrite(url);
+    // /login
+    if (url.pathname.startsWith('/login')) {
+      if (isAuthenticated) {
+        return NextResponse.redirect(new URL('/admin/pedidos', req.url));
+      }
+      return NextResponse.next();
+    }
+
+    // /admin protegido
+    if (url.pathname.startsWith('/admin')) {
+      if (!isAuthenticated) {
+        return NextResponse.redirect(new URL('/login', req.url));
       }
     }
+
     return NextResponse.next();
+  }
+
+  // 3) SUBDOMINIOS (CARTAS PÚBLICAS)
+  // Ej: rotiseriasaas.rotiseriasaas.com.ar → subdomain = rotiseriasaas
+  console.log(subdomain);
+  if (subdomain !== 'www' && subdomain !== 'rotiseriasaas' && subdomain.length > 0) {
+    // Reescribir hacia /[rotiseria]
+    url.pathname = `/${subdomain}${url.pathname}`;
+    return NextResponse.rewrite(url);
   }
 
   return NextResponse.next();
@@ -54,6 +62,6 @@ export const config = {
 
 const verificarSesion = async () => {
   const supabase = await createClient();
-  const { data } = (await supabase.auth.getUser()) || false;
-  return !!data.user;
+  const { data } = await supabase.auth.getUser();
+  return !!data?.user;
 };
