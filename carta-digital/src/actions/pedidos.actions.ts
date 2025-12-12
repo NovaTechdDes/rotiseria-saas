@@ -20,6 +20,7 @@ import { createClient } from '@/utils/supabase/server';
     */
 
 export const startGetPedidos = async (id: number, desde: string, hasta: string): Promise<Pedido[] | []> => {
+  console.log('Id Rotiseria', id);
   const supabase = await createClient();
 
   try {

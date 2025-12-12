@@ -46,9 +46,26 @@ export async function proxy(req: NextRequest) {
 
   // 3) SUBDOMINIOS (CARTAS PÚBLICAS)
   // Ej: rotiseriasaas.rotiseriasaas.com.ar → subdomain = rotiseriasaas
-  console.log(subdomain);
   if (subdomain !== 'www' && subdomain !== 'rotiseriasaas' && subdomain.length > 0) {
     // Reescribir hacia /[rotiseria]
+    console.log('b');
+    const isAuthenticated = await verificarSesion();
+
+    // /login
+    if (url.pathname.startsWith('/login')) {
+      if (isAuthenticated) {
+        return NextResponse.redirect(new URL('/admin/pedidos', req.url));
+      }
+      return NextResponse.next();
+    }
+
+    // /admin protegido
+    if (url.pathname.startsWith('/admin')) {
+      if (!isAuthenticated) {
+        return NextResponse.redirect(new URL('/login', req.url));
+      }
+    }
+
     url.pathname = `/${subdomain}${url.pathname}`;
     return NextResponse.rewrite(url);
   }
