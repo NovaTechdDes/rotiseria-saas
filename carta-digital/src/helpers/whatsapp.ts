@@ -26,7 +26,7 @@ export const enviarMensajeWhatsApp = (pedido: PedidoWhatsApp, telefonoRotiseria:
   const mensaje = `Hola, Realice un pedido desde la carta online, ¿Podrian Confirmarlo?
   Nombre: ${pedido.cliente}
   Telefono: ${pedido.telefono}
-  Domicilio: ${pedido.direccion}
+  ${pedido.direccion ? 'Domicilio: ' + pedido.direccion : ''}
   Forma de Pago: ${pedido.tipoPago === 'transferencia' ? 'Transferencia' : 'Efectivo'}
   Entrega: ${pedido.envio ? 'Enviar A Domicilio' : 'Lo paso a retirar'}
 
@@ -37,7 +37,9 @@ export const enviarMensajeWhatsApp = (pedido: PedidoWhatsApp, telefonoRotiseria:
 
   ${pedido.tipoPago === 'efectivo' && pedido.envio ? `Voy a Pagar con: $${pedido.vuelto.toFixed(2)}` : ''}
 
-  Total del Pedido: $${pedido.total.toFixed(2)}`;
+  Total del Pedido: $${pedido.total.toFixed(2)}
+  
+  ${pedido.tipoPago === 'efectivo' && pedido.envio ? `Vuelto: $${(pedido.vuelto - pedido.total).toFixed(2)}` : ''}`;
 
   const url = `https://wa.me/${telefonoRotiseria}?text=${encodeURIComponent(mensaje)}`;
   
