@@ -1,9 +1,9 @@
 'use client';
 import { useState } from 'react';
 import { X, Loader2 } from 'lucide-react';
-import Swal from 'sweetalert2'; // Usamos SweetAlert para confirmar
-
-// Imports de lógica
+import Swal from 'sweetalert2';
+import { useRotiseriaStore } from '@/store';
+import { enviarMensajeWhatsApp } from '@/helpers/whatsapp';
 import { useCarritoStore } from '@/store/useCarritoStore';
 import { useMutatePedidos } from '@/hooks/pedidos/useMutatePedidos';
 import { Button } from '@/components/ui/Button';
@@ -24,6 +24,7 @@ const initialState = {
 
 export const ClientDataModal = ({ rotiseriaId }: Props) => {
   // 1. Stores y Hooks
+  const { rotiseriaActive } = useRotiseriaStore();
   const { modalClienteCarrito, closeModalClienteCarrito, productos, total, resetCarrito } = useCarritoStore();
   const { agregarPedido } = useMutatePedidos(); // El hook que guarda en la base de datos
 
@@ -85,6 +86,19 @@ export const ClientDataModal = ({ rotiseriaId }: Props) => {
       closeModalClienteCarrito(); // Cerramos modal
       resetCarrito(); // Vaciamos carrito
       setFormData(initialState); //Reseteamos el formulario
+      
+      enviarMensajeWhatsApp({
+        cliente: formData.nombre,
+        telefono: formData.telefono,
+        direccion: formData.direccion,
+        tipoPago: formData.tipoPago,
+        envio: formData.envio === 'true',
+        observaciones: formData.observaciones,
+        productos: productos,
+        vuelto: Number(formData.vuelto),
+        total: total,
+      }, rotiseriaActive?.telefono || '');
+
       Swal.fire('¡Pedido Enviado!', 'Tu pedido ha sido recibido correctamente.', 'success');
       setError(false);
     }
