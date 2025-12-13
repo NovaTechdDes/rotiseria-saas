@@ -1,6 +1,5 @@
 import { Check, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
-import React from 'react';
 
 export const Info = () => {
   return (
@@ -54,7 +53,7 @@ export const Info = () => {
           </div>
 
           <div className="relative">
-            <Image src="/info.png" alt="Info" width={1000} height={1000} loading="eager" className="h-[350px]" />
+            <Image src="https://lwuuqboohvwbigpcxidg.supabase.co/storage/v1/object/public/logo/Info.png" alt="Info" width={1000} height={1000} loading="eager" className="h-[350px]" />
           </div>
         </div>
       </div>
