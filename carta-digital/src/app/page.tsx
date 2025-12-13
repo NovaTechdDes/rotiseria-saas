@@ -1,9 +1,11 @@
 import { Button } from '@/components/ui/Button';
 import '../styles/global.css';
 import Caracteristicas from '@/components/layout/Caracteristicas';
-import { ArrowRightIcon, Info, Link } from 'lucide-react';
+import { ArrowRightIcon } from 'lucide-react';
 import { Precio } from '@/components/layout/Precio';
 import Footer from '@/components/layout/Footer';
+import { Info } from '@/components/layout/Info';
+import Link from 'next/link';
 
 const Home = async () => {
   return (
