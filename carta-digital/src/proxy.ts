@@ -40,6 +40,7 @@ export async function proxy(req: NextRequest) {
 
   // 3) SUBDOMINIOS (CARTAS PÚBLICAS)
   // Ej: rotiseriasaas.rotiseriasaas.com.ar → subdomain = rotiseriasaas
+
   if (subdomain !== 'www' && subdomain !== 'rotiseriasaas' && subdomain.length > 0) {
     // Reescribir hacia /[rotiseria]
     const isAuthenticated = await verificarSesion();
