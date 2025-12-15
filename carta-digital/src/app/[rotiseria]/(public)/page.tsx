@@ -28,12 +28,12 @@ const RotiseriaPage = async () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar nombre={rotiseriaActive?.nombre ?? ''} telefono={rotiseriaActive?.telefono ?? ''} horario={rotiseriaActive?.horario ?? ''} logo={rotiseriaActive?.logo ?? ''} />
-      <main className="w-full px-4 sm:px-6 lg:px-8 py-6">
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-6 dark:bg-slate-900">
         {/* Buscador */}
         <BuscadorProductos />
 
         {/* Filtros */}
-        <div className="mb-6 sticky top-[80px] z-40 bg-gray-50/95 backdrop-blur-sm py-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="mb-6 sticky top-[80px] z-40 rounded-lg bg-gray-50/95 backdrop-blur-sm py-2 -mx-4 px-4 sm:mx-0 sm:px-0 dark:bg-slate-800">
           <CategoryFilter categorias={categorias} />
         </div>
 

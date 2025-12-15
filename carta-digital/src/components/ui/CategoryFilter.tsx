@@ -15,8 +15,10 @@ export const CategoryFilter = ({ categorias }: CategoryFilterProps) => {
       {/* Botón "Todos" */}
       <button
         onClick={() => setCategoriaSeleccionada(0)}
-        className={`px-6 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
-          categoriaSeleccionada === 0 ? 'bg-orange-500 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+        className={`px-6 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all cursor-pointer ${
+          categoriaSeleccionada === 0
+            ? 'bg-orange-500 text-white shadow-md'
+            : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 dark:bg-slate-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600'
         }`}
       >
         Todos
@@ -27,8 +29,10 @@ export const CategoryFilter = ({ categorias }: CategoryFilterProps) => {
         <button
           key={cat.id}
           onClick={() => setCategoriaSeleccionada(cat?.id ?? 0)}
-          className={`px-6 py-2 capitalize rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
-            categoriaSeleccionada === cat.id ? 'bg-orange-500 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+          className={`px-6 py-2 capitalize rounded-full text-sm font-semibold whitespace-nowrap transition-all cursor-pointer  ${
+            categoriaSeleccionada === cat.id
+              ? 'bg-orange-500 text-white shadow-md'
+              : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 dark:bg-slate-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600'
           }`}
         >
           {cat.nombre}

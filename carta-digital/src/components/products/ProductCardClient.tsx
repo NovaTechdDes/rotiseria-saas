@@ -51,7 +51,7 @@ export const ProductCardClient = ({ id, nombre, descripcion, precio, imagen, rot
     });
   };
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
+    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full dark:bg-slate-800">
       {/* Contenedor Imagen y Precio */}
       <div className="relative h-48 w-full bg-gray-100">
         <Image priority src={imagen} alt={nombre} width={500} height={500} className="w-full h-full object-cover" />
@@ -60,10 +60,10 @@ export const ProductCardClient = ({ id, nombre, descripcion, precio, imagen, rot
       {/* Contenido */}
       <div className="p-5 flex flex-col flex-1">
         <div className="flex justify-between items-start mb-1">
-          <h3 className="font-bold text-gray-800 text-lg">{nombre}</h3>
+          <h3 className="font-bold text-gray-800 text-lg dark:text-gray-200">{nombre}</h3>
           <span className="text-orange-600 font-bold text-lg">${precio.toFixed(2)}</span>
         </div>
-        <p className="text-gray-500 text-sm mb-4 line-clamp-2 flex-1">{descripcion}</p>
+        <p className="text-gray-500 text-sm mb-4 line-clamp-2 flex-1 dark:text-slate-400">{descripcion}</p>
 
         {/* Botón Rosado  */}
         <button
